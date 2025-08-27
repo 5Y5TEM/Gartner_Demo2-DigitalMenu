@@ -1,328 +1,144 @@
-# Documentation Retrieval Agent
+# AI Digital Menu Builder
 
-## Overview
+This project contains a multi-agent application designed to automatically generate a dynamic, interactive digital menu from a source document. Built with the Agent Development Kit (ADK), it showcases an advanced workflow involving content extraction, multimodal AI analysis, quality control, and frontend code generation.
 
-This agent is designed to answer questions related to documents you uploaded to Vertex AI RAG Engine. It utilizes Retrieval-Augmented Generation (RAG) with the Vertex AI RAG Engine to fetch relevant documentation snippets and code references, which are then synthesized by an LLM (Gemini) to provide informative answers with citations.
+The system ingests a PDF containing a restaurant's menu strategy, extracts text and images, uses the Gemini model to analyze visual content, and constructs a self-contained HTML file with interactive features.
 
+## Table of Contents
+- [Architecture Overview](#architecture-overview)
+- [Key Features](#key-features)
+- [Getting Started: Prerequisites](#getting-started-prerequisites)
+  - [1. Google Cloud Project Setup](#1-google-cloud-project-setup)
+  - [2. Knowledge Source (Vertex AI RAG Engine)](#2-knowledge-source-vertex-ai-rag-engine)
+- [Local Project Setup](#local-project-setup)
+  - [Dependencies](#dependencies)
+  - [Special Dependency: WeasyPrint](#special-dependency-weasyprint)
+  - [Environment Variables](#environment-variables)
+- [How to Run the Demo: A Step-by-Step Workflow](#how-to-run-the-demo-a-step-by-step-workflow)
+  - [Step 1: Prepare Media and Source PDF](#step-1-prepare-media-and-source-pdf)
+  - [Step 2: Run the Menu Builder Agent](#step-2-run-the-menu-builder-agent)
+- [Inspecting the Output](#inspecting-the-output)
 
-![RAG Architecture](RAG_architecture.png)
+---
 
-This diagram outlines the agent's workflow, designed to provide informed and context-aware responses. User queries are processed by agent development kit. The LLM determines if external knowledge (RAG corpus) is required. If so, the `VertexAiRagRetrieval` tool fetches relevant information from the configured Vertex RAG Engine corpus. The LLM then synthesizes this retrieved information with its internal knowledge to generate an accurate answer, including citations pointing back to the source documentation URLs.
+## Architecture Overview
 
-## Agent Details
-| Attribute         | Details                                                                                                                                                                                             |
-| :---------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Interaction Type** | Conversational                                                                                                                                                                                      |
-| **Complexity**    | Intermediate 
-| **Agent Type**    | Single Agent                                                                                                                                                                                        |
-| **Components**    | Tools, RAG, Evaluation                                                                                                                                                                               |
-| **Vertical**      | Horizontal                                                                                                                                                                               |
-### Agent Architecture
+This application uses a collaborative multi-agent system to orchestrate the menu creation process. The primary agents include a the Menu Builder Root Agent, a RAG Agent, and a Quality Control (QC) agent that facilitates a self-correction loop.
 
-![RAG](RAG_workflow.png)
+![Menu Builder Architecture Diagram](readme_artifacts/architecture.png)
 
+---
+## Key Features
 
-### Key Features
+* **Automated Content Extraction Pipeline:** Intelligently parses a source PDF to extract menu items, descriptions, prices, and images. 
+* **Dynamic Frontend Generation:** Constructs a single, self-contained HTML file with embedded CSS and JavaScript for a rich user experience. 
+* **Built-in Quality Control:** An automated QC agent reviews the generated HTML for errors and provides actionable feedback to the builder agent for self-correction.
+* **Interactive UI:** The final HTML output includes features like directly editable text fields, text-to-speech buttons, save/export functionality, and a user feedback loop.
 
-*   **Retrieval-Augmented Generation (RAG):** Leverages [Vertex AI RAG
-    Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-overview)
-    to fetch relevant documentation.
-*   **Citation Support:** Provides accurate citations for the retrieved content,
-    formatted as URLs.
-*   **Clear Instructions:** Adheres to strict guidelines for providing factual
-    answers and proper citations.
+---
+## Getting Started: Prerequisites
 
-## Setup and Installation Instructions
-### Prerequisites
+### 1. Google Cloud Project Setup
+You need a Google Cloud account and a project with billing enabled to use the Gemini model for image analysis.
+- **Get Started:** [Create a Google Cloud Project](https://cloud.google.com/resource-manager/docs/creating-managing-projects)
+- **Enable APIs:** Ensure the **Vertex AI API** is enabled for your project.
+- **Authenticate:** Authenticate your local environment using the gcloud CLI.
+  ```bash
+  gcloud auth application-default login
+  ```
 
-*   **Google Cloud Account:** You need a Google Cloud account.
-*   **Python 3.9+:** Ensure you have Python 3.9 or a later version installed.
-*   **Poetry:** Install Poetry by following the instructions on the official Poetry website: [https://python-poetry.org/docs/](https://python-poetry.org/docs/)
-*   **Git:** Ensure you have git installed.
+### 2. Knowledge Source (Vertex AI RAG Engine)
+The retriever agent within the system uses the RAG Engine to access the source document.
+- **Get Started:** [Vertex AI RAG Overview](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-overview)
+- **Action:** Create a RAG Corpus and upload the final, generated `restaurant_proposal.pdf` (created in the workflow below) to ground the retriever agent. Note the full resource name of your corpus for the `.env` file.
 
-### Project Setup with Poetry
+---
+## Local Project Setup
+
+### Dependencies
+* Python 3.10+
+* [Poetry](https://python-poetry.org/docs/) for dependency management.
+* [Git](https://git-scm.com/)
 
 1.  **Clone the Repository:**
-
     ```bash
-    git clone https://github.com/google/adk-samples.git
-    cd adk-samples/python/agents/RAG
+    git clone <your-repo-url>
+    cd <your-repo-name>
     ```
-
-2.  **Install Dependencies with Poetry:**
-
-    **Note for Linux users:** If you get an error related to `keyring` during the installation, you can disable it by running the following command:
-    ```bash
-    poetry config keyring.enabled false
-    ```
-    This is a one-time setup.
-
+2.  **Install Python Dependencies:**
+    This command reads the `pyproject.toml` file and installs dependencies into a virtual environment.
     ```bash
     poetry install
     ```
-
-    This command reads the `pyproject.toml` file and installs all the necessary dependencies into a virtual environment managed by Poetry.
-
-3.  **Activate the Poetry Shell:**
-
+3.  **Activate the Virtual Environment:**
     ```bash
-    poetry env activate
+    poetry shell
     ```
 
-    This activates the virtual environment, allowing you to run commands within the project's environment.
-    Make sure the environment is active. If not, you can also activate it through 
+### Special Dependency: WeasyPrint
+When using the optional preprocessing scripts, this project requires `WeasyPrint`  to generate the source PDF. Installation can have system-level dependencies.
+- **Instructions:** Follow the detailed guide at [https://weasyprint.org/install/](https://weasyprint.org/install/).
+- **For macOS with Homebrew:**
+  ```bash
+  brew install weasyprint
+  ```
 
-     ```bash
-    source .venv/bin/activate 
-    ```   
-4.  **Set up Environment Variables:**
-    Rename the file ".env.example" to ".env" 
-    Follow the steps in the file to set up the environment variables.
+### Environment Variables
+Rename `.env.example` to `.env` in the project root directory and populate it with your GCP project details.
 
-5. **Setup Corpus:**
-    If you have an existing corpus in Vertex AI RAG Engine, please set corpus information in your .env file. For example: RAG_CORPUS='projects/123/locations/us-central1/ragCorpora/456'. 
+```ini
+# Vertex backend config
+# Rag Engine only works with Vertex. So we should configure it to use Vertex:
+GOOGLE_CLOUD_PROJECT='YOUR_GOOGLE_CLOUD_PROJECT_ID'
+GOOGLE_CLOUD_LOCATION='us-central1'
 
-    If you don't have a corpus setup yet, please follow "How to upload my file to my RAG corpus" section. The `prepare_corpus_and_data.py` script will automatically create a corpus (if needed) and update the `RAG_CORPUS` variable in your `.env` file with the resource name of the created or retrieved corpus.
-
-#### How to upload my file to my RAG corpus
-
-The `rag/shared_libraries/prepare_corpus_and_data.py` script helps you set up a RAG corpus and upload an initial document. By default, it downloads Alphabet's 2024 10-K PDF and uploads it to a new corpus.
-
-1.  **Authenticate with your Google Cloud account:**
-    ```bash
-    gcloud auth application-default login
-    ```
-
-2.  **Set up environment variables in your `.env` file:**
-    Ensure your `.env` file (copied from `.env.example`) has the following variables set:
-    ```
-    GOOGLE_CLOUD_PROJECT=your-project-id
-    GOOGLE_CLOUD_LOCATION=your-location  # e.g., us-central1
-    ```
-
-3.  **Configure and run the preparation script:**
-    *   **To use the default behavior (upload Alphabet's 10K PDF):**
-        Simply run the script:
-        ```bash
-        python rag/shared_libraries/prepare_corpus_and_data.py
-        ```
-        This will create a corpus named `Alphabet_10K_2024_corpus` (if it doesn't exist) and upload the PDF `goog-10-k-2024.pdf` downloaded from the URL specified in the script.
-
-    *   **To upload a different PDF from a URL:**
-        a. Open the `rag/shared_libraries/prepare_corpus_and_data.py` file.
-        b. Modify the following variables at the top of the script:
-           ```python
-           # --- Please fill in your configurations ---
-           # ... project and location are read from .env ...
-           CORPUS_DISPLAY_NAME = "Your_Corpus_Name"  # Change as needed
-           CORPUS_DESCRIPTION = "Description of your corpus" # Change as needed
-           PDF_URL = "https://path/to/your/document.pdf"  # URL to YOUR PDF document
-           PDF_FILENAME = "your_document.pdf"  # Name for the file in the corpus
-           # --- Start of the script ---
-           ```
-        c. Run the script:
-           ```bash
-           python rag/shared_libraries/prepare_corpus_and_data.py
-           ```
-
-    *   **To upload a local PDF file:**
-        a. Open the `rag/shared_libraries/prepare_corpus_and_data.py` file.
-        b. Modify the `CORPUS_DISPLAY_NAME` and `CORPUS_DESCRIPTION` variables as needed (see above).
-        c. Modify the `main()` function at the bottom of the script to directly call `upload_pdf_to_corpus` with your local file details:
-           ```python
-           def main():
-             initialize_vertex_ai()
-             corpus = create_or_get_corpus() # Uses CORPUS_DISPLAY_NAME & CORPUS_DESCRIPTION
-
-             # Upload your local PDF to the corpus
-             local_file_path = "/path/to/your/local/file.pdf" # Set the correct path
-             display_name = "Your_File_Name.pdf" # Set the desired display name
-             description = "Description of your file" # Set the description
-
-             # Ensure the file exists before uploading
-             if os.path.exists(local_file_path):
-                 upload_pdf_to_corpus(
-                     corpus_name=corpus.name,
-                     pdf_path=local_file_path,
-                     display_name=display_name,
-                     description=description
-                 )
-             else:
-                 print(f"Error: Local file not found at {local_file_path}")
-
-             # List all files in the corpus
-             list_corpus_files(corpus_name=corpus.name)
-           ```
-        d. Run the script:
-           ```bash
-           python rag/shared_libraries/prepare_corpus_and_data.py
-           ```
-
-More details about managing data in Vertex RAG Engine can be found in the
-[official documentation page](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-quickstart).
-
-## Running the Agent
-You can run the agent using the ADK command in your terminal.
-from the root project directory:
-
-1.  Run agent in CLI:
-
-    ```bash
-    adk run rag
-    ```
-
-2.  Run agent with ADK Web UI:
-    ```bash
-    adk web
-    ```
-    Select the RAG from the dropdown
-
-
-### Example Interaction
-Here's a quick example of how a user might interact with the agent:
-
-**Example 1: Document Information Retrieval**
-
-User: What are the key business segments mentioned in Alphabet's 2024 10-K report?
-
-Agent: According to Alphabet's 2024 10-K report, the key business segments are:
-1. Google Services (including Google Search, YouTube, Google Maps, Play Store)
-2. Google Cloud (offering cloud computing services, data analytics, and AI solutions)
-3. Other Bets (including Waymo for autonomous driving technology)
-[Source: goog-10-k-2024.pdf]
-
-## Evaluating the Agent
-
-The evaluation can be run from the `RAG` directory using
-the `pytest` module:
+# Existing corpus in Vertex RAG Engine to be used by RAG agent
+# e.g. projects/123/locations/us-central1/ragCorpora/456
+RAG_CORPUS='projects/YOUR_GOOGLE_CLOUD_PROJECT_ID/locations/us-central1/ragCorpora/YOUR_RAG_CORPUS_ID'
 
 ```
-poetry run pytest eval
+
+---
+## How to Run the Demo: A Step-by-Step Workflow
+
+This demo involves a two-stage process: first, preparing the source media and PDF, and second, running the main agent to build the menu.
+Note: you can skip the first step if you use the images and documents provided in this example. 
+
+### Step 0: Prepare Media and Source PDF [Optional]
+These scripts use `weasyprint` and other libraries to generate AI images for the menu and compile them into the final source PDF that the main agent will use as input.
+
+Because `weasyprint` relies on system libraries outside the Python virtual environment, you must run these commands exactly as shown below on macOS.
+
+**A. Generate AI Images for the Menu:**
+```bash
+DYLD_FALLBACK_LIBRARY_PATH=$(brew --prefix)/lib poetry run python menu_builder/resources/_generate_media_pdf.py
 ```
 
-### Evaluation Process
-
-The evaluation framework consists of three key components:
-
-1. **test_eval.py**: The main test script that orchestrates the evaluation process. It uses the `AgentEvaluator` from Google ADK to run the agent against a test dataset and assess its performance based on predefined criteria.
-
-2. **conversation.test.json**: Contains a sequence of test cases structured as a conversation. Each test case includes:
-   - A user query (e.g., questions about Alphabet's 10-K report)
-   - Expected tool usage (which tools the agent should call and with what parameters)
-   - Reference answers (ideal responses the agent should provide)
-
-3. **test_config.json**: Defines evaluation criteria and thresholds:
-   - `tool_trajectory_avg_score`: Measures how well the agent uses the appropriate tools
-   - `response_match_score`: Measures how closely the agent's responses match the reference answers
-
-When you run the evaluation, the system:
-1. Loads the test cases from conversation.test.json
-2. Sends each query to the agent
-3. Compares the agent's tool usage against expected tool usage
-4. Compares the agent's responses against reference answers
-5. Calculates scores based on the criteria in test_config.json
-
-This evaluation helps ensure the agent correctly leverages the RAG capabilities to retrieve relevant information and generates accurate responses with proper citations.
-
-## Deploying the Agent
-
-The Agent can be deployed to Vertex AI Agent Engine using the following
-commands:
-
+**B. Ingest Media and Create the Final PDF:**
+```bash
+DYLD_FALLBACK_LIBRARY_PATH=$(brew --prefix)/lib poetry run python menu_builder/resources/_ingest_media.py
 ```
-python deployment/deploy.py
+After these scripts complete, you will have a `restaurant_proposal.pdf` in your `resources` folder.
+
+### Step 1: Run the Menu Builder Agent
+With the source PDF prepared, you can now run the main agent using the ADK Web UI.
+From the project root directory, run:
+```bash
+poetry run adk web
 ```
+This will start a local web server. Open the provided URL in your browser and select the `menu_builder` agent from the dropdown to start the process.
 
-After deploying the agent, you'll be able to read the following INFO log message:
+---
+## Inspecting the Output
 
-```
-Deployed agent to Vertex AI Agent Engine successfully, resource name: projects/<PROJECT_NUMBER>/locations/us-central1/reasoningEngines/<AGENT_ENGINE_ID>
-```
+After the agent finishes its run, it will save the final, interactive HTML file to the `output/` directory (e.g., `output/menu.html`).
 
-Please note your Agent Engine resource name and update `.env` file accordingly as this is crucial for testing the remote agent.
+Simply open this file in a web browser to see the generated digital menu and test its features:
+- Click the "✏️" icon to edit text directly.
+- Click the "🔊" icon to hear the text read aloud.
+- Click the "Save Changes" button to download a new version with your edits.
+- Click the "Export Final" button to download a clean version without the editing controls.
 
-You may also modify the deployment script for your use cases.
+## HITL 
 
-## Testing the deployed agent
-
-After deploying the agent, follow these steps to test it:
-
-1. **Update Environment Variables:**
-   - Open your `.env` file.
-   - The `AGENT_ENGINE_ID` should have been automatically updated by the `deployment/deploy.py` script when you deployed the agent. Verify that it is set correctly:
-     ```
-     AGENT_ENGINE_ID=projects/<PROJECT_NUMBER>/locations/us-central1/reasoningEngines/<AGENT_ENGINE_ID>
-     ```
-
-2. **Grant RAG Corpus Access Permissions:**
-   - Ensure your `.env` file has the following variables set correctly:
-     ```
-     GOOGLE_CLOUD_PROJECT=your-project-id
-     RAG_CORPUS=projects/<project-number>/locations/us-central1/ragCorpora/<corpus-id>
-     ```
-   - Run the permissions script:
-     ```bash
-     chmod +x deployment/grant_permissions.sh
-     ./deployment/grant_permissions.sh
-     ```
-   This script will:
-   - Read the environment variables from your `.env` file
-   - Create a custom role with RAG Corpus query permissions
-   - Grant the necessary permissions to the AI Platform Reasoning Engine Service Agent
-
-3. **Test the Remote Agent:**
-   - Run the test script:
-     ```bash
-     python deployment/run.py
-     ```
-   This script will:
-   - Connect to your deployed agent
-   - Send a series of test queries
-   - Display the agent's responses with proper formatting
-
-The test script includes example queries about Alphabet's 10-K report. You can modify the queries in `deployment/run.py` to test different aspects of your deployed agent.
-
-## Customization
-
-### Customize Agent
-You can customize system instruction for the agent and add more tools to suit your need, for example, google search.
-
-### Customize Vertex RAG Engine
-You can read more about [official Vertex RAG Engine documentation](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-quickstart) for more details on customizing corpora and data.
-
-
-### Plug-in other retrieval sources
-You can also integrate your preferred retrieval sources to enhance the agent's
-capabilities. For instance, you can seamlessly replace or augment the existing
-`VertexAiRagRetrieval` tool with a tool that utilizes Vertex AI Search or any
-other retrieval mechanism. This flexibility allows you to tailor the agent to
-your specific data sources and retrieval requirements.
-
-
-## Troubleshooting
-
-### Quota Exceeded Errors
-
-When running the `prepare_corpus_and_data.py` script, you may encounter an error related to API quotas, such as:
-
-```
-Error uploading file ...: 429 Quota exceeded for aiplatform.googleapis.com/online_prediction_requests_per_base_model with base model: textembedding-gecko.
-```
-
-This is especially common for new Google Cloud projects that have lower default quotas.
-
-**Solution:**
-
-You will need to request a quota increase for the model you are using.
-
-1.  Navigate to the **Quotas** page in the Google Cloud Console: [https://console.cloud.google.com/iam-admin/quotas](https://console.cloud.google.com/iam-admin/quotas)
-2.  Follow the instructions in the official documentation to request a quota increase: [https://cloud.google.com/vertex-ai/docs/quotas#request_a_quota_increase](https://cloud.google.com/vertex-ai/docs/quotas#request_a_quota_increase)
-
-
-## Disclaimer
-
-This agent sample is provided for illustrative purposes only and is not intended for production use. It serves as a basic example of an agent and a foundational starting point for individuals or teams to develop their own agents.
-
-This sample has not been rigorously tested, may contain bugs or limitations, and does not include features or optimizations typically required for a production environment (e.g., robust error handling, security measures, scalability, performance considerations, comprehensive logging, or advanced configuration options).
-
-Users are solely responsible for any further development, testing, security hardening, and deployment of agents based on this sample. We recommend thorough review, testing, and the implementation of appropriate safeguards before using any derived agent in a live or critical system.
+You can make changes on the text components directly in the provided html. For an interactive building experience, feel free to converse with the menu builder agent and let it know in the chat interface if you want to see any changes on the digital menu. 
