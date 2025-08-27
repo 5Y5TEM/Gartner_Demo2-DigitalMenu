@@ -1,0 +1,1119 @@
+
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Anchor & Olive - Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+        }
+        .menu-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: center;
+        }
+        .menu-page {
+            width: 210mm; /* A4 width */
+            height: 297mm; /* A4 height */
+            background-color: #F8F8F8; /* Crisp Off-White/Cream */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30mm;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            page-break-after: always;
+        }
+        .menu-page:last-of-type {
+            page-break-after: avoid;
+        }
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            color: #0F4C81; /* Deep Aegean Blue */
+            text-align: center;
+            font-size: 2.8em;
+            margin-bottom: 5px;
+        }
+        .tagline {
+            font-family: 'Montserrat', sans-serif;
+            color: #8F9779; /* Warm Olive Green */
+            text-align: center;
+            font-size: 1.1em;
+            margin-bottom: 40px;
+        }
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            color: #0F4C81; /* Deep Aegean Blue */
+            font-size: 2.2em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #E9C46A; /* Goldenrod Yellow/Ochre */
+            padding-bottom: 5px;
+            text-align: center;
+        }
+        .section-description {
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 25px;
+            color: #666;
+        }
+        .menu-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            position: relative;
+        }
+        .item-image-container {
+            flex-shrink: 0;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 20px;
+            border: 2px solid #8F9779; /* Warm Olive Green */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #eee;
+        }
+        .item-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .item-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            width: 100%;
+            position: relative;
+            margin-bottom: 5px;
+        }
+        .item-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3em;
+            color: #333;
+            font-weight: 500;
+            flex-grow: 1;
+            margin-right: 15px;
+        }
+        .item-price {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2em;
+            color: #0F4C81;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .item-description {
+            font-size: 1em;
+            color: #555;
+            margin-top: 5px;
+        }
+        .controls {
+            position: absolute;
+            right: 0;
+            top: 0;
+            display: flex;
+            gap: 5px;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 2px;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .menu-item:hover .controls,
+        .item-name:hover + .controls,
+        .item-price:hover + .controls,
+        .item-description:hover + .controls,
+        .editable:focus + .controls {
+            opacity: 1;
+        }
+        .control-btn {
+            background: none;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            padding: 3px 6px;
+            cursor: pointer;
+            font-size: 0.8em;
+            color: #0F4C81;
+            transition: background-color 0.2s;
+        }
+        .control-btn:hover {
+            background-color: #e0e0e0;
+        }
+        .control-btn.edit-btn {
+            background-color: #E9C46A;
+            color: #FFF;
+            border-color: #E9C46A;
+        }
+        .control-btn.edit-btn:hover {
+            background-color: #d9b45a;
+        }
+        .control-btn.sound-btn {
+            background-color: #8F9779;
+            color: #FFF;
+            border-color: #8F9779;
+        }
+        .control-btn.sound-btn:hover {
+            background-color: #7f8769;
+        }
+
+        .rating {
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .star {
+            cursor: pointer;
+            color: #ccc;
+            font-size: 1.2em;
+            transition: color 0.2s;
+        }
+        .star.selected {
+            color: #E9C46A;
+        }
+        .feedback-form-container {
+            margin-top: 50px;
+            padding: 30px;
+            background-color: #F8F8F8;
+            border: 1px solid #eee;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            width: 80%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .feedback-form-container h3 {
+            text-align: center;
+            color: #0F4C81;
+            margin-bottom: 20px;
+        }
+        .feedback-form-container textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1em;
+            resize: vertical;
+        }
+        .feedback-form-container button {
+            display: block;
+            width: 100%;
+            padding: 10px 20px;
+            background-color: #0F4C81;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1em;
+            transition: background-color 0.3s;
+        }
+        .feedback-form-container button:hover {
+            background-color: #1a5a91;
+        }
+
+        .top-buttons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+        .top-buttons .control-btn {
+            padding: 10px 15px;
+            font-size: 1em;
+            border-width: 2px;
+            border-radius: 5px;
+        }
+        .top-buttons .save-btn {
+            background-color: #0F4C81;
+            color: #FFF;
+            border-color: #0F4C81;
+        }
+        .top-buttons .save-btn:hover {
+            background-color: #1a5a91;
+        }
+        .top-buttons .export-btn {
+            background-color: #8F9779;
+            color: #FFF;
+            border-color: #8F9779;
+        }
+        .top-buttons .export-btn:hover {
+            background-color: #7f8769;
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+            }
+            .menu-page {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                margin: 0;
+                page-break-after: always;
+            }
+            .menu-page:last-of-type {
+                page-break-after: avoid;
+            }
+            .top-buttons, .control-btn.edit-btn, .control-btn.sound-btn, .rating {
+                display: none !important;
+            }
+            .feedback-form-container {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-buttons">
+        <button class="control-btn save-btn" onclick="savePage()">Save Changes</button>
+        <button class="control-btn export-btn" onclick="exportFinal()">Export Final</button>
+    </div>
+
+    <div class="menu-container">
+        <div class="menu-page">
+            <h1>The Anchor & Olive</h1>
+            <p class="tagline">Modern Coastal Mediterranean with a San Francisco Soul</p>
+            <h2>Small Plates & Mezze</h2>
+            <p class="section-description">Designed to encourage a communal dining experience.</p>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/house_made_hummus_2.png" alt="House-Made Hummus" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">House-Made Hummus</span>
+                        <span class="item-price editable" contenteditable="true">$10 - $14</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">Classic chickpea dip with tahini, lemon, and local olive oil, served with warm, freshly baked pita bread.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="house_made_hummus">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/smoky_baba_ghanoush_1.png" alt="Smoky Baba Ghanoush" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Smoky Baba Ghanoush</span>
+                        <span class="item-price editable" contenteditable="true">$10 - $14</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">Roasted eggplant dip with tahini, garlic, and a hint of smoked paprika, also with pita.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="smoky_baba_ghanoush">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/whipped_feta_with_local_honey_pistachios_1.png" alt="Whipped Feta with Local Honey & Pistachios" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Whipped Feta with Local Honey & Pistachios</span>
+                        <span class="item-price editable" contenteditable="true">$10 - $14</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">A delightful sweet and savory spread utilizing local honey.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="whipped_feta_with_local_honey_pistachios">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/htipiti_roasted_red_pepper_feta_dip_2.png" alt="Htipiti (Roasted Red Pepper & Feta Dip)" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Htipiti (Roasted Red Pepper & Feta Dip)</span>
+                        <span class="item-price editable" contenteditable="true">$10 - $14</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">Spicy and tangy, served with crudités.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="htipiti_roasted_red_pepper_feta_dip">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/grilled_calamari_with_lemon_herb_vinaigrette_2.png" alt="Grilled Calamari with Lemon & Herb Vinaigrette" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Grilled Calamari with Lemon & Herb Vinaigrette</span>
+                        <span class="item-price editable" contenteditable="true">$16 - $22</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">Tender, lightly charred calamari.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="grilled_calamari_with_lemon_herb_vinaigrette">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/marinated_sardines_with_calabrian_chili_mint_2.png" alt="Marinated Sardines with Calabrian Chili & Mint" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Marinated Sardines with Calabrian Chili & Mint</span>
+                        <span class="item-price editable" contenteditable="true">$16 - $22</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">A nod to traditional Mediterranean coastal fare, sustainably sourced.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="marinated_sardines_with_calabrian_chili_mint">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/Crudo of Local Catch.png" alt="Crudo of Local Catch" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Crudo of Local Catch</span>
+                        <span class="item-price editable" contenteditable="true">$16 - $22</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">Thinly sliced fresh, sustainable local fish (e.g., halibut, salmon, rockfish) with citrus, olive oil, and sea salt.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="crudo_of_local_catch">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/crispy_anchovy_fritters_with_garlic_aioli_2.png" alt="Crispy Anchovy Fritters with Garlic Aioli" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Crispy Anchovy Fritters with Garlic Aioli</span>
+                        <span class="item-price editable" contenteditable="true">$16 - $22</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">A savory Mediterranean bar snack.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="crispy_anchovy_fritters_with_garlic_aioli">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/halloumi_saganaki_with_fig_jam_toasted_almonds_1.png" alt="Halloumi Saganaki with Fig Jam & Toasted Almonds" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Halloumi Saganaki with Fig Jam & Toasted Almonds</span>
+                        <span class="item-price editable" contenteditable="true">$12 - $18</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">Pan-seared halloumi cheese, a Greek classic.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="halloumi_saganaki_with_fig_jam_toasted_almonds">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/seasonal_roasted_vegetables_with_green_goddess_tahini_2.png" alt="Seasonal Roasted Vegetables with Green Goddess Tahini" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Seasonal Roasted Vegetables with Green Goddess Tahini</span>
+                        <span class="item-price editable" contenteditable="true">$12 - $18</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">Showcasing the best of local produce (e.g., asparagus, artichokes, squash, beets, fennel, depending on the season).</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="seasonal_roasted_vegetables_with_green_goddess_tahini">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/spicy_lamb_meatballs_with_tomato_harissa_sauce_1.png" alt="Spicy Lamb Meatballs with Tomato-Harissa Sauce" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Spicy Lamb Meatballs with Tomato-Harissa Sauce</span>
+                        <span class="item-price editable" contenteditable="true">$12 - $18</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">A comforting, flavorful option.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="spicy_lamb_meatballs_with_tomato_harissa_sauce">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/crispy_potato_herb_fritters_with_tzatziki_1.png" alt="Crispy Potato & Herb Fritters with Tzatziki" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Crispy Potato & Herb Fritters with Tzatziki</span>
+                        <span class="item-price editable" contenteditable="true">$12 - $18</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">A hearty vegetarian choice.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="crispy_potato_herb_fritters_with_tzatziki">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="menu-page">
+            <h1>The Anchor & Olive</h1>
+            <p class="tagline">Modern Coastal Mediterranean with a San Francisco Soul</p>
+            <h2>Salads & Bowls</h2>
+            <p class="section-description">Lunch & Lighter Dinner Options</p>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/mediterranean_superfood_salad_2.png" alt="Mediterranean Superfood Salad" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Mediterranean Superfood Salad</span>
+                        <span class="item-price editable" contenteditable="true">$18 - $28</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">Mixed greens, quinoa, chickpeas, cucumber, tomato, red onion, feta, Kalamata olives, sumac vinaigrette, topped with choice of grilled chicken, salmon, or falafel.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="mediterranean_superfood_salad">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/grilled_halloumi_watermelon_salad_2.png" alt="Grilled Halloumi & Watermelon Salad" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Grilled Halloumi & Watermelon Salad</span>
+                        <span class="item-price editable" contenteditable="true">$18 - $28</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">A refreshing summer salad with arugula, mint, and balsamic glaze.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="grilled_halloumi_watermelon_salad">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/anchor_olive_grain_bowl_2.png" alt=""Anchor & Olive" Grain Bowl" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">"Anchor & Olive" Grain Bowl</span>
+                        <span class="item-price editable" contenteditable="true">$18 - $28</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">Base of farro or couscous, seasonal roasted vegetables, choice of protein (grilled fish, chicken, lamb kofta), hummus, tzatziki, pickled onions, and a lemon-herb tahini dressing.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="anchor_olive_grain_bowl">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="menu-page">
+            <h1>The Anchor & Olive</h1>
+            <p class="tagline">Modern Coastal Mediterranean with a San Francisco Soul</p>
+            <h2>Main Courses</h2>
+            <p class="section-description">Entrées</p>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/grilled_whole_fish_daily_catch_1.png" alt="Grilled Whole Fish (Daily Catch)" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Grilled Whole Fish (Daily Catch)</span>
+                        <span class="item-price editable" contenteditable="true">$30 - $55</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">Sustainably sourced local fish, simply grilled with lemon, herbs, and local olive oil. Served with a seasonal vegetable pilaf.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="grilled_whole_fish_daily_catch">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/dungeness_crab_tagliatelle_2.png" alt="Dungeness Crab Tagliatelle" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Dungeness Crab Tagliatelle</span>
+                        <span class="item-price editable" contenteditable="true">$30 - $55</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">Fresh house-made pasta with local Dungeness crab, cherry tomatoes, garlic, white wine, and a hint of chili.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="dungeness_crab_tagliatelle">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/seafood_cioppino_signature_dish_1.png" alt="Seafood Cioppino (Signature Dish)" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Seafood Cioppino (Signature Dish)</span>
+                        <span class="item-price editable" contenteditable="true">$30 - $55</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">Our refined take on the classic San Francisco seafood stew, featuring Dungeness crab, mussels, clams, and market fish in a rich tomato-fennel broth, served with grilled sourdough.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="seafood_cioppino_signature_dish">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/wood_fired_lamb_chops_with_gremolata_1.png" alt="Wood-Fired Lamb Chops with Gremolata" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Wood-Fired Lamb Chops with Gremolata</span>
+                        <span class="item-price editable" contenteditable="true">$30 - $55</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">Perfectly grilled lamb chops, served with roasted root vegetables and a vibrant herb sauce.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="wood_fired_lamb_chops_with_gremolata">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/california_chicken_tagine_2.png" alt="California Chicken Tagine" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">California Chicken Tagine</span>
+                        <span class="item-price editable" contenteditable="true">$30 - $55</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">Slow-cooked chicken with preserved lemon, olives, and Moroccan spices, served with couscous.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="california_chicken_tagine">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/vegan_moussaka_2.png" alt="Vegan Moussaka" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Vegan Moussaka</span>
+                        <span class="item-price editable" contenteditable="true">$30 - $55</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">A layered dish of eggplant, lentils, and seasonal vegetables with a creamy béchamel sauce.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="vegan_moussaka">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="menu-page">
+            <h1>The Anchor & Olive</h1>
+            <p class="tagline">Modern Coastal Mediterranean with a San Francisco Soul</p>
+            <h2>Desserts</h2>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/baklava_with_pistachio_ice_cream_2.png" alt="Baklava with Pistachio Ice Cream" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Baklava with Pistachio Ice Cream</span>
+                        <span class="item-price editable" contenteditable="true">$10 - $16</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">Classic flaky pastry with local honey and a scoop of house-made pistachio ice cream.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="baklava_with_pistachio_ice_cream">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/olive_oil_cake_with_seasonal_berry_compote_mascarpone_1.png" alt="Olive Oil Cake with Seasonal Berry Compote & Mascarpone" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Olive Oil Cake with Seasonal Berry Compote & Mascarpone</span>
+                        <span class="item-price editable" contenteditable="true">$10 - $16</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">A light, fragrant cake utilizing local olive oil.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="olive_oil_cake_with_seasonal_berry_compote_mascarpone">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/saffron_orange_blossom_panna_cotta_2.png" alt="Saffron & Orange Blossom Panna Cotta" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Saffron & Orange Blossom Panna Cotta</span>
+                        <span class="item-price editable" contenteditable="true">$10 - $16</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">A delicate and aromatic Italian-Mediterranean twist.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="saffron_orange_blossom_panna_cotta">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/ghirardelli_chocolate_lava_cake_with_tahini_caramel_2.png" alt="Ghirardelli Chocolate Lava Cake with Tahini Caramel" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Ghirardelli Chocolate Lava Cake with Tahini Caramel</span>
+                        <span class="item-price editable" contenteditable="true">$10 - $16</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">A local San Francisco chocolate indulgence with a Mediterranean twist.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="ghirardelli_chocolate_lava_cake_with_tahini_caramel">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="menu-page">
+            <h1>The Anchor & Olive</h1>
+            <p class="tagline">Modern Coastal Mediterranean with a San Francisco Soul</p>
+            <h2>Beverages</h2>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/brand_logo.png" alt="Signature Cocktails" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Signature Cocktails</span>
+                        <span class="item-price editable" contenteditable="true">$14 - $18</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">Mediterranean-inspired creations (e.g., 'Aegean Spritz' with prosecco, Aperol, grapefruit; 'Golden Gate G&T' with local gin, Mediterranean tonic, rosemary). Focus on fresh ingredients, house-made syrups, and local spirits where possible.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="signature_cocktails">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/brand_logo.png" alt="Local & Mediterranean Wine List" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Local & Mediterranean Wine List</span>
+                        <span class="item-price editable" contenteditable="true">Glasses: $12 - $20, Bottles: starting from $40+</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">A carefully curated selection of Californian wines, with an emphasis on coastal varietals, alongside wines from Greece, Italy, and Spain.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="local_mediterranean_wine_list">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/brand_logo.png" alt="Craft Beers" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Craft Beers</span>
+                        <span class="item-price editable" contenteditable="true">$8 - $12</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">A selection of local San Francisco and Bay Area craft beers.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="craft_beers">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/brand_logo.png" alt="Non-Alcoholic Options" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Non-Alcoholic Options</span>
+                        <span class="item-price editable" contenteditable="true">$6 - $10</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">Creative mocktails (e.g., Cucumber Mint Fizz, Pomegranate Rose Cooler), house-made lemonades, and iced teas.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="non_alcoholic_options">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-image-container">
+                    <img src="images/brand_logo.png" alt="Coffee & Tea" class="item-image">
+                </div>
+                <div class="item-content">
+                    <div class="item-header">
+                        <span class="item-name editable" contenteditable="true">Coffee & Tea</span>
+                        <span class="item-price editable" contenteditable="true">$6 - $10</span>
+                    </div>
+                    <p class="item-description editable" contenteditable="true">A high-quality coffee program, including traditional Turkish coffee.</p>
+                    <div class="controls">
+                        <button class="control-btn edit-btn" onclick="toggleEdit(this)">✏️</button>
+                        <button class="control-btn sound-btn" onclick="speakText(this)">🔊</button>
+                        <div class="rating" data-item-id="coffee_tea">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="menu-page feedback-form-container">
+        <h3>We'd Love Your Feedback!</h3>
+        <textarea placeholder="Share your thoughts on your dining experience..."></textarea>
+        <button onclick="submitFeedback()">Submit Feedback</button>
+    </div>
+
+    <script>
+        function toggleEdit(button) {
+            const editableElement = button.closest('.menu-item').querySelector('.item-name'); // Target the first editable element
+            // You could extend this to make all editable fields in the item toggle edit mode
+            editableElement.focus();
+        }
+
+        function speakText(button) {
+            let textToSpeak = '';
+            const parent = button.closest('.menu-item');
+            if (parent) {
+                const name = parent.querySelector('.item-name');
+                const price = parent.querySelector('.item-price');
+                const description = parent.querySelector('.item-description');
+                if (name) textToSpeak += name.innerText + '. ';
+                if (price) textToSpeak += 'Price: ' + price.innerText + '. ';
+                if (description) textToSpeak += description.innerText;
+            } else { // For general editable text
+                textToSpeak = button.previousElementSibling.innerText;
+            }
+
+            if (textToSpeak) {
+                const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                utterance.lang = 'en-US';
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        document.querySelectorAll('.rating .star').forEach(star => {
+            star.addEventListener('click', function() {
+                const value = parseInt(this.dataset.value);
+                const parentRating = this.closest('.rating');
+                const itemId = parentRating.dataset.itemId;
+
+                parentRating.querySelectorAll('.star').forEach(s => {
+                    s.classList.remove('selected');
+                });
+
+                for (let i = 1; i <= value; i++) {
+                    parentRating.querySelector(`.star[data-value="${i}"]`).classList.add('selected');
+                }
+                alert(`You rated ${itemId ? 'item ' + itemId.replace(/_/g, ' ') : 'this'} ${value} stars! Thank you.`);
+            });
+        });
+
+        function submitFeedback() {
+            const feedbackText = document.querySelector('.feedback-form-container textarea').value;
+            if (feedbackText.trim() !== '') {
+                alert('Thank you for your feedback!');
+                document.querySelector('.feedback-form-container textarea').value = ''; // Clear the textarea
+            } else {
+                alert('Please enter your feedback before submitting.');
+            }
+        }
+
+        function savePage() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'menu_editable.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+        }
+
+        function exportFinal() {
+            const clonedDoc = document.documentElement.cloneNode(true);
+
+            // Remove control buttons (edit, save, export) from the cloned document
+            clonedDoc.querySelectorAll('.top-buttons, .control-btn.edit-btn').forEach(el => el.remove());
+
+            // For sound, star rating, and feedback form buttons, keep them if needed
+            // The prompt says "The only buttons left should be for playing sound, star ratings, and the submit feedback form."
+            // So, for now, if there are any *other* buttons not explicitly allowed, remove them.
+            // The sound, star and feedback buttons have specific classes and should be kept.
+            // Let's refine the removal to target *only* the edit, save and export buttons.
+            clonedDoc.querySelectorAll('.control-btn.save-btn, .control-btn.export-btn').forEach(el => el.remove());
+
+            // Ensure the feedback form's text area and submit button remain.
+            // The current structure already keeps them because only buttons with specific removal classes are targeted.
+
+            // Get the outerHTML of the cleaned clone
+            const cleanHtmlContent = clonedDoc.outerHTML;
+            const blob = new Blob([cleanHtmlContent], { type: 'text/html' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'menu_final.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+        }
+    </script>
+</body>
+</html>

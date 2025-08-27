@@ -4,409 +4,997 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Wharfside Grill - Menu</title>
+    <title>The Anchor & Olive - Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lora:wght@400;700&family=Montserrat:wght@430&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-blue: #0F4C81;
+            --olive-green: #8F9779;
+            --off-white: #F8F8F8;
+            --goldenrod: #E9C46A;
+            --copper: #B87333;
+            --main-font: 'Playfair Display', serif;
+            --tagline-font: 'Lora', serif;
+            --body-font: 'Montserrat', sans-serif;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--body-font);
             margin: 0;
-            padding: 0;
-            background-color: #1a1a1a;
-            color: #f0f0f0;
-            line-height: 1.6;
+            padding: 20px;
+            background-color: #f2f2f2;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            align-items: center;
+            color: #333;
         }
-        header {
-            background-color: #000;
-            color: #fff;
-            padding: 1rem 2rem;
+
+        .header {
+            width: 100%;
+            max-width: 800px; /* Aligns with menu-page width */
+            margin-bottom: 30px;
             text-align: center;
-            border-bottom: 3px solid #b3884c;
+            padding: 20px;
+            background-color: var(--off-white);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-family: var(--main-font);
+            color: var(--primary-blue);
+            font-size: 2.5em;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-family: var(--tagline-font);
+            color: var(--olive-green);
+            font-size: 1.1em;
+            font-style: italic;
+        }
+
+        .header-buttons {
+            margin-top: 15px;
+        }
+
+        .header-buttons button {
+            background-color: var(--primary-blue);
+            color: var(--off-white);
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .header-buttons button:hover {
+            background-color: var(--olive-green);
+        }
+
+        .menu-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px; /* Space between pages */
+            padding: 20px 0;
+        }
+
+        .menu-page {
+            width: 794px; /* A4 width at 96 dpi */
+            height: 1123px; /* A4 height at 96 dpi */
+            background-color: var(--off-white);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            padding: 50px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            page-break-after: always; /* For print simulation */
+        }
+
+        .menu-page h2 {
+            font-family: var(--main-font);
+            color: var(--primary-blue);
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--goldenrod);
+            padding-bottom: 10px;
+        }
+
+        .section-description {
+            font-family: var(--tagline-font);
+            text-align: center;
+            margin-top: -20px;
+            margin-bottom: 20px;
+            color: #555;
+            font-size: 1.1em;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed var(--olive-green);
+            position: relative;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .item-thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+            border: 3px solid var(--goldenrod);
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+
+        .item-details {
+            flex-grow: 1;
+        }
+
+        .item-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
+            margin-bottom: 5px;
         }
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            flex-grow: 1;
-        }
-        .header-buttons {
-            display: flex;
-            gap: 10px;
-            margin-left: auto;
-        }
-        .btn {
-            background-color: #b3884c;
-            color: #1a1a1a;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
-        }
-        .btn:hover {
-            background-color: #a07a42;
-        }
-        main {
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            flex-grow: 1;
-        }
-        .menu-item-card {
-            background-color: #2a2a2a;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-        }
-        .menu-item-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-        }
-        .menu-item-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-bottom: 3px solid #b3884c;
-        }
-        .card-content {
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-        .card-content h2 {
-            font-size: 1.8rem;
-            color: #b3884c;
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
-        .card-content p {
-            font-size: 1rem;
-            margin-bottom: 15px;
-        }
-        .card-content .price {
-            font-size: 1.3rem;
+
+        .item-name {
+            font-family: var(--body-font);
             font-weight: bold;
-            color: #f0f0f0;
-            margin-top: auto; /* Pushes price to the bottom */
-            margin-bottom: 15px;
+            font-size: 1.2em;
+            color: var(--primary-blue);
+            flex-grow: 1;
+            cursor: text; /* Indicate editable */
         }
-        .controls {
+
+        .item-price {
+            font-family: var(--body-font);
+            font-weight: bold;
+            font-size: 1.2em;
+            color: var(--copper);
+            white-space: nowrap; /* Prevent price from wrapping */
+            margin-left: 20px;
+            cursor: text; /* Indicate editable */
+        }
+
+        .item-description {
+            font-family: var(--body-font);
+            font-size: 0.95em;
+            line-height: 1.4;
+            color: #666;
+            margin-top: 5px;
+            cursor: text; /* Indicate editable */
+        }
+
+        .item-actions {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 0;
+            right: 0;
             display: flex;
             gap: 5px;
-            z-index: 10;
         }
-        .control-btn {
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #fff;
+
+        .item-actions button {
+            background: none;
             border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-size: 0.9em;
             cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
+            padding: 2px;
+            color: var(--primary-blue);
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
         }
-        .control-btn:hover {
-            background-color: rgba(0, 0, 0, 0.9);
+
+        .item-actions button:hover {
+            opacity: 1;
+            color: var(--goldenrod);
         }
-        .stars {
-            display: flex;
-            gap: 5px;
+
+        .rating {
             margin-top: 10px;
-            margin-bottom: 15px;
+            text-align: right;
+            display: flex;
+            justify-content: flex-end;
         }
+
         .star {
-            color: #555;
+            font-size: 1.2em;
+            color: #ccc;
             cursor: pointer;
-            font-size: 1.5rem;
-            transition: color 0.2s ease;
+            transition: color 0.2s;
+            margin-left: 2px;
         }
-        .star.selected, .star:hover ~ .star {
-            color: #b3884c;
+
+        .star.selected, .star:hover {
+            color: var(--goldenrod);
         }
-        .star:hover {
-            color: #b3884c;
+
+        .star-message {
+            margin-top: 5px;
+            font-size: 0.85em;
+            color: var(--olive-green);
         }
-        .feedback-section {
-            background-color: #2a2a2a;
-            padding: 2rem;
-            margin-top: 2rem;
-            border-top: 3px solid #b3884c;
+
+        .feedback-form {
+            background-color: var(--off-white);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 30px;
+            margin-top: 40px;
+            width: 100%;
+            max-width: 700px;
+            box-sizing: border-box;
             text-align: center;
         }
-        .feedback-section h2 {
-            color: #b3884c;
-            font-size: 2rem;
-            margin-bottom: 1rem;
+
+        .feedback-form h3 {
+            font-family: var(--main-font);
+            color: var(--primary-blue);
+            margin-bottom: 20px;
         }
-        .feedback-section textarea {
-            width: 80%;
-            max-width: 600px;
-            height: 100px;
+
+        .feedback-form textarea {
+            width: calc(100% - 20px);
             padding: 10px;
             margin-bottom: 15px;
-            border: 1px solid #555;
+            border: 1px solid #ddd;
             border-radius: 5px;
-            background-color: #333;
-            color: #f0f0f0;
+            font-family: var(--body-font);
             resize: vertical;
         }
-        .feedback-section .btn {
-            background-color: #b3884c;
-            color: #1a1a1a;
+
+        .feedback-form button {
+            background-color: var(--primary-blue);
+            color: var(--off-white);
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
         }
+
+        .feedback-form button:hover {
+            background-color: var(--olive-green);
+        }
+
         .feedback-message {
             margin-top: 15px;
-            color: #b3884c;
+            color: var(--olive-green);
             font-weight: bold;
-        }
-
-        /* Utility classes for export function */
-        .no-export {
-            display: none !important;
-        }
-
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .header-buttons {
-                margin-left: 0;
-                margin-top: 10px;
-            }
-            main {
-                padding: 1rem;
-                gap: 1rem;
-            }
-            .card-content h2 {
-                font-size: 1.5rem;
-            }
-            .card-content .price {
-                font-size: 1.1rem;
-            }
-            .feedback-section textarea {
-                width: 100%;
-            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>The Wharfside Grill - Menu</h1>
+    <div class="header">
+        <h1>The Anchor & Olive</h1>
+        <p>Modern Coastal Mediterranean with a San Francisco Soul</p>
         <div class="header-buttons">
-            <button class="btn export-control" id="saveChangesBtn">💾 Save Changes</button>
-            <button class="btn export-control" id="exportFinalBtn">🚀 Export Final</button>
+            <button onclick="alert('Saving changes (this is a dummy function).')">Save Changes</button>
+            <button onclick="alert('Exporting final HTML (this is a dummy function).')">Export Final</button>
         </div>
-    </header>
+    </div>
 
-    <main id="menuContainer">
-        <!-- Menu Items will be dynamically inserted here by JavaScript -->
-    </main>
+    <div class="menu-container">
 
-    <section class="feedback-section">
-        <h2>General Feedback</h2>
-        <textarea id="generalFeedback" placeholder="Share your thoughts about our menu..."></textarea>
-        <button class="btn export-control" id="submitFeedbackBtn">Submit Feedback</button>
-        <div id="feedbackMessage" class="feedback-message"></div>
-    </section>
-
-    <script>
-        const menuItemsData = [
-            {
-                "name": "Sourdough Bowl with Clam Chowder",
-                "price": "$12.00",
-                "description": "A San Francisco classic. Our creamy New England-style clam chowder is served in a freshly baked, crusty sourdough bread bowl from a local bakery.",
-                "image": "steaming_clam_chowder_bread_bowl.png"
-            },
-            {
-                "name": "Pier 39 Ribeye",
-                "price": "$42.00",
-                "description": "This is our signature steak dish, a perfectly marbled 12oz Prime Ribeye. We grill this magnificent cut to your exact preference, sealing in the succulent juices and rich flavor that make it a true classic. The steak is served alongside our creamy garlic mashed potatoes and fresh, seasonal vegetables sourced from local California farms.",
-                "image": "grilled_steak_dinner.png"
-            },
-            {
-                "name": "Fisherman's Catch (Dungeness Crab)",
-                "price": "$55.00",
-                "description": "A whole steamed Dungeness crab, caught locally and served with drawn butter, lemon, and a side of garlic bread. This dish offers an authentic taste of Fisherman's Wharf and is perfect for sharing.",
-                "image": "whole_cooked_crab.png"
-            }
-        ];
-
-        const menuContainer = document.getElementById('menuContainer');
-
-        menuItemsData.forEach(item => {
-            const card = document.createElement('div');
-            card.classList.add('menu-item-card');
-
-            card.innerHTML = `
-                <img src="images/${item.image}" alt="${item.name}">
-                <div class="card-content">
-                    <h2 contenteditable="false">${item.name}</h2>
-                    <p contenteditable="false">${item.description}</p>
-                    <div class="price" contenteditable="false">${item.price}</div>
-                    <div class="stars" data-rating="0">
-                        <span class="star" data-value="1">★</span>
-                        <span class="star" data-value="2">★</span>
-                        <span class="star" data-value="3">★</span>
-                        <span class="star" data-value="4">★</span>
-                        <span class="star" data-value="5">★</span>
+        <div class="menu-page">
+            <h2>Small Plates & Mezze</h2>
+            <p class="section-description">Designed to encourage a communal dining experience. $10 - $22</p>
+    
+            <div class="menu-item">
+                <img src="images/house_made_hummus_2.png" alt="House-Made Hummus" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">House-Made Hummus</span>
+                        <span class="item-price" data-editable="price">$10 - $14</span>
+                    </div>
+                    <p class="item-description" data-editable="description">Classic chickpea dip with tahini, lemon, and local olive oil, served with warm, freshly baked pita bread.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="House-Made Hummus">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
                     </div>
                 </div>
-                <div class="controls">
-                    <button class="control-btn edit-btn export-control" data-action="edit">✏️</button>
-                    <button class="control-btn speak-btn" data-action="speak">🔊</button>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/smoky_baba_ghanoush_1.png" alt="Smoky Baba Ghanoush" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Smoky Baba Ghanoush</span>
+                        <span class="item-price" data-editable="price">$10 - $14</span>
+                    </div>
+                    <p class="item-description" data-editable="description">Roasted eggplant dip with tahini, garlic, and a hint of smoked paprika, also with pita.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Smoky Baba Ghanoush">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
                 </div>
-            `;
-            menuContainer.appendChild(card);
-        });
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/whipped_feta_with_local_honey_pistachios_1.png" alt="Whipped Feta with Local Honey & Pistachios" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Whipped Feta with Local Honey & Pistachios</span>
+                        <span class="item-price" data-editable="price">$10 - $14</span>
+                    </div>
+                    <p class="item-description" data-editable="description">A delightful sweet and savory spread utilizing local honey.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Whipped Feta with Local Honey & Pistachios">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/htipiti_roasted_red_pepper_feta_dip_2.png" alt="Htipiti (Roasted Red Pepper & Feta Dip)" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Htipiti (Roasted Red Pepper & Feta Dip)</span>
+                        <span class="item-price" data-editable="price">$10 - $14</span>
+                    </div>
+                    <p class="item-description" data-editable="description">Spicy and tangy, served with crudités.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Htipiti (Roasted Red Pepper & Feta Dip)">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/grilled_calamari_with_lemon_herb_vinaigrette_2.png" alt="Grilled Calamari with Lemon & Herb Vinaigrette" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Grilled Calamari with Lemon & Herb Vinaigrette</span>
+                        <span class="item-price" data-editable="price">$16 - $22</span>
+                    </div>
+                    <p class="item-description" data-editable="description">Tender, lightly charred calamari.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Grilled Calamari with Lemon & Herb Vinaigrette">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/marinated_sardines_with_calabrian_chili_mint_2.png" alt="Marinated Sardines with Calabrian Chili & Mint" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Marinated Sardines with Calabrian Chili & Mint</span>
+                        <span class="item-price" data-editable="price">$16 - $22</span>
+                    </div>
+                    <p class="item-description" data-editable="description">A nod to traditional Mediterranean coastal fare, sustainably sourced.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Marinated Sardines with Calabrian Chili & Mint">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/Crudo of Local Catch.png" alt="Crudo of Local Catch" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Crudo of Local Catch</span>
+                        <span class="item-price" data-editable="price">$16 - $22</span>
+                    </div>
+                    <p class="item-description" data-editable="description">Thinly sliced fresh, sustainable local fish (e.g., halibut, salmon, rockfish) with citrus, olive oil, and sea salt.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Crudo of Local Catch">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/crispy_anchovy_fritters_with_garlic_aioli_2.png" alt="Crispy Anchovy Fritters with Garlic Aioli" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Crispy Anchovy Fritters with Garlic Aioli</span>
+                        <span class="item-price" data-editable="price">$16 - $22</span>
+                    </div>
+                    <p class="item-description" data-editable="description">A savory Mediterranean bar snack.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Crispy Anchovy Fritters with Garlic Aioli">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/halloumi_saganaki_with_fig_jam_toasted_almonds_1.png" alt="Halloumi Saganaki with Fig Jam & Toasted Almonds" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Halloumi Saganaki with Fig Jam & Toasted Almonds</span>
+                        <span class="item-price" data-editable="price">$12 - $18</span>
+                    </div>
+                    <p class="item-description" data-editable="description">Pan-seared halloumi cheese, a Greek classic.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Halloumi Saganaki with Fig Jam & Toasted Almonds">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/seasonal_roasted_vegetables_with_green_goddess_tahini_2.png" alt="Seasonal Roasted Vegetables with Green Goddess Tahini" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Seasonal Roasted Vegetables with Green Goddess Tahini</span>
+                        <span class="item-price" data-editable="price">$12 - $18</span>
+                    </div>
+                    <p class="item-description" data-editable="description">Showcasing the best of local produce (e.g., asparagus, artichokes, squash, beets, fennel, depending on the season).</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Seasonal Roasted Vegetables with Green Goddess Tahini">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/spicy_lamb_meatballs_with_tomato_harissa_sauce_1.png" alt="Spicy Lamb Meatballs with Tomato-Harissa Sauce" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Spicy Lamb Meatballs with Tomato-Harissa Sauce</span>
+                        <span class="item-price" data-editable="price">$12 - $18</span>
+                    </div>
+                    <p class="item-description" data-editable="description">A comforting, flavorful option.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Spicy Lamb Meatballs with Tomato-Harissa Sauce">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/crispy_potato_herb_fritters_with_tzatziki_1.png" alt="Crispy Potato & Herb Fritters with Tzatziki" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Crispy Potato & Herb Fritters with Tzatziki</span>
+                        <span class="item-price" data-editable="price">$12 - $18</span>
+                    </div>
+                    <p class="item-description" data-editable="description">A hearty vegetarian choice.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Crispy Potato & Herb Fritters with Tzatziki">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="menu-page">
+            <h2>Salads & Bowls</h2>
+            <p class="section-description">(Lunch & Lighter Dinner Options) $18 - $28</p>
+    
+            <div class="menu-item">
+                <img src="images/mediterranean_superfood_salad_2.png" alt="Mediterranean Superfood Salad" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Mediterranean Superfood Salad</span>
+                        <span class="item-price" data-editable="price">$18 - $28</span>
+                    </div>
+                    <p class="item-description" data-editable="description">Mixed greens, quinoa, chickpeas, cucumber, tomato, red onion, feta, Kalamata olives, sumac vinaigrette, topped with choice of grilled chicken, salmon, or falafel.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Mediterranean Superfood Salad">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/grilled_halloumi_watermelon_salad_2.png" alt="Grilled Halloumi & Watermelon Salad" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Grilled Halloumi & Watermelon Salad</span>
+                        <span class="item-price" data-editable="price">$18 - $28</span>
+                    </div>
+                    <p class="item-description" data-editable="description">A refreshing summer salad with arugula, mint, and balsamic glaze.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Grilled Halloumi & Watermelon Salad">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/anchor_olive_grain_bowl_2.png" alt="&quot;Anchor &amp; Olive&quot; Grain Bowl" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">&quot;Anchor &amp; Olive&quot; Grain Bowl</span>
+                        <span class="item-price" data-editable="price">$18 - $28</span>
+                    </div>
+                    <p class="item-description" data-editable="description">Base of farro or couscous, seasonal roasted vegetables, choice of protein (grilled fish, chicken, lamb kofta), hummus, tzatziki, pickled onions, and a lemon-herb tahini dressing.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="&quot;Anchor &amp; Olive&quot; Grain Bowl">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="menu-page">
+            <h2>Main Courses</h2>
+            <p class="section-description">(Entrées) $30 - $55</p>
+    
+            <div class="menu-item">
+                <img src="images/grilled_whole_fish_daily_catch_1.png" alt="Grilled Whole Fish (Daily Catch)" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Grilled Whole Fish (Daily Catch)</span>
+                        <span class="item-price" data-editable="price">$30 - $55</span>
+                    </div>
+                    <p class="item-description" data-editable="description">Sustainably sourced local fish, simply grilled with lemon, herbs, and local olive oil. Served with a seasonal vegetable pilaf.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Grilled Whole Fish (Daily Catch)">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/dungeness_crab_tagliatelle_2.png" alt="Dungeness Crab Tagliatelle" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Dungeness Crab Tagliatelle</span>
+                        <span class="item-price" data-editable="price">$30 - $55</span>
+                    </div>
+                    <p class="item-description" data-editable="description">Fresh house-made pasta with local Dungeness crab, cherry tomatoes, garlic, white wine, and a hint of chili.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Dungeness Crab Tagliatelle">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/seafood_cioppino_signature_dish_1.png" alt="Seafood Cioppino (Signature Dish)" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Seafood Cioppino (Signature Dish)</span>
+                        <span class="item-price" data-editable="price">$30 - $55</span>
+                    </div>
+                    <p class="item-description" data-editable="description">Our refined take on the classic San Francisco seafood stew, featuring Dungeness crab, mussels, clams, and market fish in a rich tomato-fennel broth, served with grilled sourdough.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Seafood Cioppino (Signature Dish)">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/wood_fired_lamb_chops_with_gremolata_1.png" alt="Wood-Fired Lamb Chops with Gremolata" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Wood-Fired Lamb Chops with Gremolata</span>
+                        <span class="item-price" data-editable="price">$30 - $55</span>
+                    </div>
+                    <p class="item-description" data-editable="description">Perfectly grilled lamb chops, served with roasted root vegetables and a vibrant herb sauce.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Wood-Fired Lamb Chops with Gremolata">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/california_chicken_tagine_2.png" alt="California Chicken Tagine" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">California Chicken Tagine</span>
+                        <span class="item-price" data-editable="price">$30 - $55</span>
+                    </div>
+                    <p class="item-description" data-editable="description">Slow-cooked chicken with preserved lemon, olives, and Moroccan spices, served with couscous.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="California Chicken Tagine">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/vegan_moussaka_2.png" alt="Vegan Moussaka" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Vegan Moussaka</span>
+                        <span class="item-price" data-editable="price">$30 - $55</span>
+                    </div>
+                    <p class="item-description" data-editable="description">A layered dish of eggplant, lentils, and seasonal vegetables with a creamy béchamel sauce.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Vegan Moussaka">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="menu-page">
+            <h2>Desserts</h2>
+            <p class="section-description">$10 - $16</p>
+    
+            <div class="menu-item">
+                <img src="images/baklava_with_pistachio_ice_cream_2.png" alt="Baklava with Pistachio Ice Cream" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Baklava with Pistachio Ice Cream</span>
+                        <span class="item-price" data-editable="price">$10 - $16</span>
+                    </div>
+                    <p class="item-description" data-editable="description">Classic flaky pastry with local honey and a scoop of house-made pistachio ice cream.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Baklava with Pistachio Ice Cream">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/olive_oil_cake_with_seasonal_berry_compote_mascarpone_1.png" alt="Olive Oil Cake with Seasonal Berry Compote & Mascarpone" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Olive Oil Cake with Seasonal Berry Compote & Mascarpone</span>
+                        <span class="item-price" data-editable="price">$10 - $16</span>
+                    </div>
+                    <p class="item-description" data-editable="description">A light, fragrant cake utilizing local olive oil.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Olive Oil Cake with Seasonal Berry Compote & Mascarpone">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/saffron_orange_blossom_panna_cotta_2.png" alt="Saffron & Orange Blossom Panna Cotta" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Saffron & Orange Blossom Panna Cotta</span>
+                        <span class="item-price" data-editable="price">$10 - $16</span>
+                    </div>
+                    <p class="item-description" data-editable="description">A delicate and aromatic Italian-Mediterranean twist.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Saffron & Orange Blossom Panna Cotta">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                <img src="images/ghirardelli_chocolate_lava_cake_with_tahini_caramel_2.png" alt="Ghirardelli Chocolate Lava Cake with Tahini Caramel" class="item-thumbnail">
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Ghirardelli Chocolate Lava Cake with Tahini Caramel</span>
+                        <span class="item-price" data-editable="price">$10 - $16</span>
+                    </div>
+                    <p class="item-description" data-editable="description">A local San Francisco chocolate indulgence with a Mediterranean twist.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Ghirardelli Chocolate Lava Cake with Tahini Caramel">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="menu-page">
+            <h2>Beverages</h2>
+            <p class="section-description">Cocktails $14 - $18; Glasses of wine $12 - $20; Bottles of wine starting from $40+; Craft beers $8 - $12; Non-alcoholic drinks $6 - $10</p>
+    
+            <div class="menu-item">
+                
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Signature Cocktails</span>
+                        <span class="item-price" data-editable="price">$14 - $18</span>
+                    </div>
+                    <p class="item-description" data-editable="description">Mediterranean-inspired creations (e.g., "Aegean Spritz" with prosecco, Aperol, grapefruit; "Golden Gate G&T" with local gin, Mediterranean tonic, rosemary). Focus on fresh ingredients, house-made syrups, and local spirits where possible.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Signature Cocktails">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Local &amp; Mediterranean Wine List</span>
+                        <span class="item-price" data-editable="price">Glasses $12 - $20, Bottles starting from $40+</span>
+                    </div>
+                    <p class="item-description" data-editable="description">A carefully curated selection of Californian wines, with an emphasis on coastal varietals, alongside wines from Greece, Italy, and Spain.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Local &amp; Mediterranean Wine List">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Craft Beers</span>
+                        <span class="item-price" data-editable="price">$8 - $12</span>
+                    </div>
+                    <p class="item-description" data-editable="description">A selection of local San Francisco and Bay Area craft beers.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Craft Beers">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Non-Alcoholic Options</span>
+                        <span class="item-price" data-editable="price">$6 - $10</span>
+                    </div>
+                    <p class="item-description" data-editable="description">Creative mocktails (e.g., Cucumber Mint Fizz, Pomegranate Rose Cooler), house-made lemonades, and iced teas.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Non-Alcoholic Options">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="menu-item">
+                
+                <div class="item-details">
+                    <div class="item-header">
+                        <span class="item-name" data-editable="name">Coffee &amp; Tea</span>
+                        <span class="item-price" data-editable="price"></span>
+                    </div>
+                    <p class="item-description" data-editable="description">A high-quality coffee program, including traditional Turkish coffee.</p>
+                    <div class="item-actions">
+                        <button class="edit-btn" title="Edit text">✏️</button>
+                        <button class="speak-btn" title="Listen to text">🔊</button>
+                    </div>
+                    <div class="rating" data-item="Coffee &amp; Tea">
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+                        <div class="star-message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    </div>
 
-        // Editable Text Functionality
-        document.querySelectorAll('.edit-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const parentCard = this.closest('.menu-item-card');
-                const editableElements = parentCard.querySelectorAll('h2, p, .price');
-                editableElements.forEach(el => {
-                    const isEditable = el.contentEditable === 'true';
-                    el.contentEditable = !isEditable;
-                    el.style.outline = isEditable ? 'none' : '1px dashed #b3884c';
-                    el.style.cursor = isEditable ? 'default' : 'text';
-                });
-                this.textContent = this.textContent === '✏️' ? '✅' : '✏️'; // Change button text
-            });
-        });
+    <div class="feedback-form">
+        <h3>We'd Love Your Feedback!</h3>
+        <textarea placeholder="Tell us about your experience..." rows="5"></textarea>
+        <button onclick="alert('Thank you for your feedback!')">Submit Feedback</button>
+        <div class="feedback-message" style="display: none;">Thank you for your feedback!</div>
+    </div>
 
-        // Text-to-Speech Functionality
-        document.querySelectorAll('.speak-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const parentCard = this.closest('.menu-item-card');
-                const textToSpeak = Array.from(parentCard.querySelectorAll('h2, p, .price'))
-                                       .map(el => el.textContent)
-                                       .join('. ');
-                if (textToSpeak && window.speechSynthesis) {
-                    const utterance = new SpeechSynthesisUtterance(textToSpeak);
-                    utterance.lang = 'en-US';
-                    window.speechSynthesis.speak(utterance);
-                } else if (!window.speechSynthesis) {
-                    alert("Your browser does not support the Web Speech API.");
-                }
-            });
-        });
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Editable text functionality
+            document.querySelectorAll('.edit-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const parent = this.closest('.item-details');
+                    const nameSpan = parent.querySelector('.item-name');
+                    const priceSpan = parent.querySelector('.item-price');
+                    const descPara = parent.querySelector('.item-description');
 
-        // Star Rating Functionality
-        document.querySelectorAll('.stars').forEach(starsContainer => {
-            starsContainer.addEventListener('click', function(e) {
-                if (e.target.classList.contains('star')) {
-                    const value = parseInt(e.target.dataset.value);
-                    starsContainer.dataset.rating = value;
-                    Array.from(starsContainer.children).forEach(star => {
-                        star.classList.remove('selected');
-                    });
-                    for (let i = 0; i < value; i++) {
-                        starsContainer.children[i].classList.add('selected');
-                    }
-                }
-            });
-            starsContainer.addEventListener('mouseover', function(e) {
-                if (e.target.classList.contains('star')) {
-                    const value = parseInt(e.target.dataset.value);
-                    Array.from(starsContainer.children).forEach(star => {
-                        if (parseInt(star.dataset.value) <= value) {
-                            star.classList.add('hovered');
+                    // Function to make a span editable
+                    const makeEditable = (element) => {
+                        if (element.contentEditable === 'true') {
+                            element.contentEditable = 'false';
+                            element.style.border = 'none';
+                            element.style.padding = '0';
+                            element.style.backgroundColor = 'transparent';
                         } else {
-                            star.classList.remove('hovered');
+                            element.contentEditable = 'true';
+                            element.style.border = '1px dashed #ccc';
+                            element.style.padding = '2px 5px';
+                            element.style.backgroundColor = '#fff';
+                            element.focus();
                         }
-                    });
-                }
-            });
-            starsContainer.addEventListener('mouseout', function() {
-                Array.from(starsContainer.children).forEach(star => {
-                    star.classList.remove('hovered');
+                    };
+
+                    makeEditable(nameSpan);
+                    makeEditable(priceSpan);
+                    makeEditable(descPara);
                 });
             });
-        });
 
-        // General Feedback Submission
-        document.getElementById('submitFeedbackBtn').addEventListener('click', function() {
-            const feedbackText = document.getElementById('generalFeedback').value;
-            const feedbackMessageDiv = document.getElementById('feedbackMessage');
-            if (feedbackText.trim() !== '') {
-                feedbackMessageDiv.textContent = "Thank you for your feedback!";
-                document.getElementById('generalFeedback').value = ''; // Clear textarea
-                setTimeout(() => {
-                    feedbackMessageDiv.textContent = '';
-                }, 3000); // Clear message after 3 seconds
-            } else {
-                feedbackMessageDiv.textContent = "Please enter some feedback.";
-                feedbackMessageDiv.style.color = "red";
-                setTimeout(() => {
-                    feedbackMessageDiv.textContent = '';
-                    feedbackMessageDiv.style.color = "#b3884c";
-                }, 3000);
-            }
-        });
+            // Text-to-speech functionality
+            document.querySelectorAll('.speak-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const parent = this.closest('.item-details');
+                    const name = parent.querySelector('.item-name').textContent;
+                    const description = parent.querySelector('.item-description').textContent;
+                    const textToSpeak = `${name}. ${description}`;
 
-        // Save Changes Button
-        document.getElementById('saveChangesBtn').addEventListener('click', function() {
-            const htmlContent = document.documentElement.outerHTML;
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'menu_editable.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(a.href);
-        });
-
-        // Export Final Button
-        document.getElementById('exportFinalBtn').addEventListener('click', function() {
-            const clone = document.documentElement.cloneNode(true);
-
-            // Remove all elements with 'export-control' class from the clone
-            clone.querySelectorAll('.export-control').forEach(el => el.remove());
-
-            // Remove contenteditable attributes and outline styles from the clone
-            clone.querySelectorAll('[contenteditable="true"]').forEach(el => {
-                el.removeAttribute('contenteditable');
-                el.style.outline = 'none';
-                el.style.cursor = 'default';
-            });
-            
-            // Revert '✅' back to '✏️' if any
-            clone.querySelectorAll('.edit-btn').forEach(btn => {
-                if (btn.textContent === '✅') {
-                    btn.textContent = '✏️';
-                }
+                    if ('speechSynthesis' in window) {
+                        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                        utterance.lang = 'en-US';
+                        utterance.rate = 1.0;
+                        utterance.pitch = 1.0;
+                        window.speechSynthesis.speak(utterance);
+                    } else {
+                        alert('Text-to-speech not supported in your browser.');
+                    };
+                });
             });
 
+            // 5-star rating functionality
+            document.querySelectorAll('.rating').forEach(ratingContainer => {
+                const stars = ratingContainer.querySelectorAll('.star');
+                const messageDiv = ratingContainer.querySelector('.star-message');
 
-            const htmlContent = clone.outerHTML;
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'menu_final.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(a.href);
+                stars.forEach(star => {
+                    star.addEventListener('click', function() {
+                        const value = parseInt(this.dataset.value);
+                        stars.forEach(s => {
+                            if (parseInt(s.dataset.value) <= value) {
+                                s.classList.add('selected');
+                            } else {
+                                s.classList.remove('selected');
+                            }
+                        });
+                        messageDiv.textContent = 'Thank you for your rating!';
+                        messageDiv.style.display = 'block';
+                        setTimeout(() => { messageDiv.style.display = 'none'; }, 2000);
+                    });
+
+                    star.addEventListener('mouseover', function() {
+                        const value = parseInt(this.dataset.value);
+                        stars.forEach(s => {
+                            if (parseInt(s.dataset.value) <= value) {
+                                s.style.color = 'var(--goldenrod)';
+                            }
+                        });
+                    });
+
+                    star.addEventListener('mouseout', function() {
+                        stars.forEach(s => {
+                            if (!s.classList.contains('selected')) {
+                                s.style.color = '#ccc';
+                            }
+                        });
+                    });
+                });
+            });
+
+            // General feedback form submission
+            document.querySelector('.feedback-form button').addEventListener('click', function() {
+                const messageDiv = document.querySelector('.feedback-form .feedback-message');
+                messageDiv.style.display = 'block';
+                setTimeout(() => { messageDiv.style.display = 'none'; }, 3000);
+                document.querySelector('.feedback-form textarea').value = ''; // Clear textarea
+            });
         });
     </script>
 </body>

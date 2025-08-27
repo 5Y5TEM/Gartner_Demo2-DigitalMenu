@@ -35,6 +35,3 @@ root_agent = Agent(
     instruction=return_instructions_root(),
     tools=[call_rag_agent, call_qc_agent, load_image_list, save_html],
 )
-
-
-# Help me create the restaurant frontend. Design should be sleek, dark and modern
