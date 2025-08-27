@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wharfside Grill - Menu</title>
+    <style>
+        :root {
+            --dark-bg: #1a1a1a;
+            --light-text: #f0f0f0;
+            --accent-color: #e0b355; /* A golden/bronze accent */
+            --card-bg: #2a2a2a;
+            --border-color: #444;
+            --button-hover-bg: #e0b355;
+            --button-hover-text: #1a1a1a;
+            --star-color-empty: #555;
+            --star-color-filled: #FFD700; /* Gold */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            margin: 0;
+            color: var(--accent-color);
+            font-size: 2.5em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .header-buttons button {
+            background-color: var(--accent-color);
+            color: var(--dark-bg);
+            border: none;
+            padding: 10px 20px;
+            margin-left: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .header-buttons button:hover {
+            background-color: var(--button-hover-bg);
+            color: var(--button-hover-text);
+        }
+
+        main {
+            padding: 20px 40px;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        #menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .menu-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+        }
+
+        .menu-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .menu-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu-content h2 {
+            color: var(--accent-color);
+            margin-top: 0;
+            font-size: 1.8em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu-content p {
+            margin-bottom: 15px;
+            color: #ccc;
+            flex-grow: 1;
+        }
+
+        .menu-content .price {
+            font-size: 1.4em;
+            color: var(--accent-color);
+            font-weight: bold;
+            text-align: right;
+            margin-top: auto; /* Pushes price to the bottom */
+        }
+
+        .editable-controls {
+            display: flex;
+            gap: 5px;
+            margin-left: 10px;
+        }
+
+        .editable-btn, .tts-btn {
+            background: none;
+            border: none;
+            font-size: 1em;
+            cursor: pointer;
+            color: var(--accent-color);
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .editable-btn:hover, .tts-btn:hover {
+            opacity: 1;
+        }
+
+        .star-rating {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            direction: rtl; /* For right-to-left star display */
+        }
+
+        .star-rating input[type="radio"] {
+            display: none;
+        }
+
+        .star-rating label {
+            font-size: 2em;
+            color: var(--star-color-empty);
+            cursor: pointer;
+            padding: 0 2px;
+            transition: color 0.2s ease;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label,
+        .star-rating input[type="radio"]:checked ~ label {
+            color: var(--star-color-filled);
+        }
+
+        #general-feedback {
+            background-color: var(--card-bg);
+            padding: 30px;
+            margin-top: 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        #general-feedback h2 {
+            color: var(--accent-color);
+            margin-top: 0;
+            font-size: 2em;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        #feedback-text {
+            width: calc(100% - 20px);
+            height: 120px;
+            background-color: #333;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 10px;
+            color: var(--light-text);
+            font-size: 1em;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+
+        #submit-feedback {
+            background-color: var(--accent-color);
+            color: var(--dark-bg);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        #submit-feedback:hover {
+            background-color: var(--button-hover-bg);
+            color: var(--button-hover-text);
+        }
+
+        #feedback-message {
+            text-align: center;
+            padding: 10px;
+            background-color: #28a74533; /* Light green with transparency */
+            border-radius: 5px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>The Wharfside Grill Menu</h1>
+        <div class="header-buttons">
+            <button id="saveChanges">💾 Save Changes</button>
+            <button id="exportFinal">🚀 Export Final</button>
+        </div>
+    </header>
+
+    <main>
+        <section id="menu-items">
+            <!-- Menu items will be dynamically generated here by JavaScript -->
+        </section>
+
+        <section id="general-feedback">
+            <h2>General Feedback</h2>
+            <textarea id="feedback-text" placeholder="Share your thoughts about your dining experience..."></textarea>
+            <button id="submit-feedback">Submit Feedback</button>
+            <p id="feedback-message" style="display: none;">Thank you for your feedback!</p>
+        </section>
+    </main>
+
+    <script>
+        const menuItems = [
+            {
+                name: "Sourdough Bowl with Clam Chowder",
+                price: "12 dollars",
+                description: "A San Francisco classic. Our creamy New England-style clam chowder is served in a freshly baked, crusty sourdough bread bowl from a local bakery.",
+                image: "steaming_clam_chowder_bread_bowl.png"
+            },
+            {
+                name: "Pier 39 Ribeye",
+                price: "$42.00",
+                description: "This is our signature steak dish, a perfectly marbled 12oz Prime Ribeye. We grill this magnificent cut to your exact preference, sealing in the succulent juices and rich flavor that make it a true classic. The steak is served alongside our creamy garlic mashed potatoes and fresh, seasonal vegetables sourced from local California farms.",
+                image: "grilled_steak_dinner.png"
+            },
+            {
+                name: "Fisherman\'s Catch (Dungeness Crab)",
+                price: "$55.00",
+                description: "A whole steamed Dungeness crab, caught locally and served with drawn butter, lemon, and a side of garlic bread. This dish offers an authentic taste of Fisherman\'s Wharf and is perfect for sharing.",
+                image: "whole_cooked_crab.png"
+            }
+        ];
+
+        const menuItemsContainer = document.getElementById('menu-items');
+
+        menuItems.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'menu-card';
+
+            card.innerHTML = `
+                <img src="images/${item.image}" alt="${item.name}">
+                <div class="menu-content">
+                    <h2>
+                        <span class="editable" data-field="name">${item.name}</span>
+                        <div class="editable-controls">
+                            <button class="editable-btn" data-target="name">✏️</button>
+                            <button class="tts-btn" data-target="name">🔊</button>
+                        </div>
+                    </h2>
+                    <p>
+                        <span class="editable" data-field="description">${item.description}</span>
+                        <div class="editable-controls">
+                            <button class="editable-btn" data-target="description">✏️</button>
+                            <button class="tts-btn" data-target="description">🔊</button>
+                        </div>
+                    </p>
+                    <div class="price">
+                        <span class="editable" data-field="price">${item.price}</span>
+                        <div class="editable-controls">
+                            <button class="editable-btn" data-target="price">✏️</button>
+                            <button class="tts-btn" data-target="price">🔊</button>
+                        </div>
+                    </div>
+                    <div class="star-rating" data-item-name="${item.name}">
+                        <input type="radio" id="star5-${item.name.replace(/\s/g, '-')}" name="rating-${item.name.replace(/\s/g, '-')}" value="5" /><label for="star5-${item.name.replace(/\s/g, '-')}" title="5 stars">★</label>
+                        <input type="radio" id="star4-${item.name.replace(/\s/g, '-')}" name="rating-${item.name.replace(/\s/g, '-')}" value="4" /><label for="star4-${item.name.replace(/\s/g, '-')}" title="4 stars">★</label>
+                        <input type="radio" id="star3-${item.name.replace(/\s/g, '-')}" name="rating-${item.name.replace(/\s/g, '-')}" value="3" /><label for="star3-${item.name.replace(/\s/g, '-')}" title="3 stars">★</label>
+                        <input type="radio" id="star2-${item.name.replace(/\s/g, '-')}" name="rating-${item.name.replace(/\s/g, '-')}" value="2" /><label for="star2-${item.name.replace(/\s/g, '-')}" title="2 stars">★</label>
+                        <input type="radio" id="star1-${item.name.replace(/\s/g, '-')}" name="rating-${item.name.replace(/\s/g, '-')}" value="1" /><label for="star1-${item.name.replace(/\s/g, '-')}" title="1 star">★</label>
+                    </div>
+                </div>
+            `;
+            menuItemsContainer.appendChild(card);
+        });
+
+        // Editable functionality
+        document.querySelectorAll('.editable-btn').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const targetField = event.target.dataset.target;
+                const parentElement = event.target.closest('.menu-content');
+                const editableSpan = parentElement.querySelector(`.editable[data-field="${targetField}"]`);
+
+                if (editableSpan) {
+                    editableSpan.contentEditable = editableSpan.contentEditable === 'true' ? 'false' : 'true';
+                    editableSpan.focus();
+                    editableSpan.style.border = editableSpan.contentEditable === 'true' ? '1px dashed var(--accent-color)' : 'none';
+                }
+            });
+        });
+
+        // Text-to-Speech functionality
+        const synth = window.speechSynthesis;
+        document.querySelectorAll('.tts-btn').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const targetField = event.target.dataset.target;
+                const parentElement = event.target.closest('.menu-content');
+                const textSpan = parentElement.querySelector(`.editable[data-field="${targetField}"]`);
+                if (textSpan && synth) {
+                    const utterance = new SpeechSynthesisUtterance(textSpan.textContent);
+                    synth.speak(utterance);
+                }
+            });
+        });
+
+        // Save Changes Button
+        document.getElementById('saveChanges').addEventListener('click', () => {
+            const currentMenuData = [];
+            document.querySelectorAll('.menu-card').forEach(card => {
+                const name = card.querySelector('.editable[data-field="name"]').textContent;
+                const description = card.querySelector('.editable[data-field="description"]').textContent;
+                const price = card.querySelector('.editable[data-field="price"]').textContent;
+                const image = card.querySelector('img').src.split('/').pop(); // Extract filename from src
+
+                currentMenuData.push({ name, description, price, image });
+            });
+            console.log('Saved Changes (to console):', currentMenuData);
+            alert('Changes saved! (Check console for data)');
+        });
+
+        // Export Final Button
+        document.getElementById('exportFinal').addEventListener('click', () => {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'exported_menu.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            alert('Menu exported as exported_menu.html!');
+        });
+
+        // General Feedback Submission
+        document.getElementById('submit-feedback').addEventListener('click', () => {
+            const feedbackText = document.getElementById('feedback-text').value;
+            const feedbackMessage = document.getElementById('feedback-message');
+            console.log('General Feedback:', feedbackText);
+
+            // Simulate submission
+            if (feedbackText.trim() !== '') {
+                feedbackMessage.style.display = 'block';
+                feedbackMessage.textContent = 'Thank you for your feedback!';
+                document.getElementById('feedback-text').value = ''; // Clear textarea
+                setTimeout(() => {
+                    feedbackMessage.style.display = 'none';
+                }, 3000); // Hide message after 3 seconds
+            } else {
+                 feedbackMessage.style.display = 'block';
+                 feedbackMessage.textContent = 'Please enter some feedback before submitting.';
+                 feedbackMessage.style.color = 'red';
+                 feedbackMessage.style.backgroundColor = '#dc354533';
+                 setTimeout(() => {
+                    feedbackMessage.style.display = 'none';
+                    feedbackMessage.style.color = '#28a745'; /* Reset to green */
+                    feedbackMessage.style.backgroundColor = '#28a74533'; /* Reset background */
+                }, 3000);
+            }
+        });
+
+        // Star rating functionality (dummy - for display only)
+        document.querySelectorAll('.star-rating input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', (event) => {
+                const rating = event.target.value;
+                const itemName = event.target.closest('.star-rating').dataset.itemName;
+                console.log(`User rated "${itemName}" with ${rating} stars.`);
+                // In a real application, you would send this data to a server
+            });
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,476 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wharfside Grill - Menu</title>
+    <style>
+        :root {
+            --dark-background: #1a1a1a;
+            --dark-card: #2c2c2c;
+            --text-color: #f0f0f0;
+            --accent-color: #e0b400; /* Gold-like accent */
+            --button-hover: #444444;
+            --star-color: #ffd700; /* Gold for stars */
+            --button-bg: #3c3c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-background);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--dark-card);
+            padding: 20px 40px;
+            text-align: center;
+            border-bottom: 2px solid var(--accent-color);
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            color: var(--accent-color);
+            font-size: 2.5em;
+        }
+
+        .header-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .header-buttons button {
+            background-color: var(--accent-color);
+            color: var(--dark-background);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .header-buttons button:hover {
+            background-color: #c09a00;
+        }
+
+        main {
+            flex-grow: 1;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        .menu-card {
+            background-color: var(--dark-card);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .menu-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .card-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-content h2 {
+            color: var(--accent-color);
+            margin-top: 0;
+            font-size: 1.8em;
+            position: relative;
+        }
+
+        .card-content p {
+            margin-bottom: 15px;
+            flex-grow: 1;
+            position: relative;
+        }
+
+        .card-content .price {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-align: right;
+            margin-top: auto;
+            position: relative;
+        }
+
+        .control-buttons {
+            margin-left: 10px;
+            background: var(--button-bg);
+            border: none;
+            padding: 5px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.2s ease;
+        }
+
+        .control-buttons:hover {
+            background-color: var(--button-hover);
+        }
+
+        .editable-text {
+            display: inline-block;
+        }
+
+        .star-rating {
+            display: inline-block;
+            direction: rtl;
+            unicode-bidi: bidi-override;
+            margin-top: 10px;
+            padding-top: 10px; /* Space above rating */
+            border-top: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+        }
+
+        .star-rating input[type="radio"] {
+            display: none;
+        }
+
+        .star-rating label {
+            font-size: 1.8em;
+            color: #444; /* Default dull star color */
+            cursor: pointer;
+            padding: 0 2px;
+            transition: color 0.2s ease;
+        }
+
+        .star-rating input[type="radio"]:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: var(--star-color);
+        }
+
+        .star-rating .submit-rating {
+            background-color: var(--accent-color);
+            color: var(--dark-background);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-left: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .star-rating .submit-rating:hover {
+            background-color: #c09a00;
+        }
+
+        .feedback-section {
+            background-color: var(--dark-card);
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            max-width: 800px;
+        }
+
+        .feedback-section h2 {
+            color: var(--accent-color);
+            margin-top: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .feedback-section textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: var(--text-color);
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .feedback-section button {
+            background-color: var(--accent-color);
+            color: var(--dark-background);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .feedback-section button:hover {
+            background-color: #c09a00;
+        }
+
+        .feedback-message, .rating-message {
+            margin-top: 15px;
+            color: var(--accent-color);
+            font-weight: bold;
+            display: none; /* Hidden by default */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><span class="editable-text">The Wharfside Grill</span></h1>
+        <div class="header-buttons">
+            <button id="saveChangesBtn" class="control-buttons">💾 Save Changes</button>
+            <button id="exportFinalBtn" class="control-buttons">🚀 Export Final</button>
+        </div>
+    </header>
+
+    <main id="menuContainer">
+        <div class="menu-card">
+            <img src="images/steaming_clam_chowder_bread_bowl.png" alt="Sourdough Bowl with Clam Chowder">
+            <div class="card-content">
+                <h2>
+                    <span class="editable-text">Sourdough Bowl with Clam Chowder</span>
+                    <button class="control-buttons edit-button">✏️</button>
+                    <button class="control-buttons speak-button">🔊</button>
+                </h2>
+                <p>
+                    <span class="editable-text">A San Francisco classic. Our creamy New England-style clam chowder is served in a freshly baked, crusty sourdough bread bowl from a local bakery.</span>
+                    <button class="control-buttons edit-button">✏️</button>
+                    <button class="control-buttons speak-button">🔊</button>
+                </p>
+                <div class="price">
+                    <span class="editable-text">$12.00</span>
+                    <button class="control-buttons edit-button">✏️</button>
+                    <button class="control-buttons speak-button">🔊</button>
+                </div>
+                <div class="star-rating">
+                    <input type="radio" id="star5-chowder" name="rating-chowder" value="5" /><label for="star5-chowder" title="5 stars">&#9733;</label>
+                    <input type="radio" id="star4-chowder" name="rating-chowder" value="4" /><label for="star4-chowder" title="4 stars">&#9733;</label>
+                    <input type="radio" id="star3-chowder" name="rating-chowder" value="3" /><label for="star3-chowder" title="3 stars">&#9733;</label>
+                    <input type="radio" id="star2-chowder" name="rating-chowder" value="2" /><label for="star2-chowder" title="2 stars">&#9733;</label>
+                    <input type="radio" id="star1-chowder" name="rating-chowder" value="1" /><label for="star1-chowder" title="1 star">&#9733;</label>
+                    <button class="submit-rating control-buttons">Submit Rating</button>
+                    <div class="rating-message">Thank you for your rating!</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-card">
+            <img src="images/grilled_steak_dinner.png" alt="Pier 39 Ribeye">
+            <div class="card-content">
+                <h2>
+                    <span class="editable-text">Pier 39 Ribeye</span>
+                    <button class="control-buttons edit-button">✏️</button>
+                    <button class="control-buttons speak-button">🔊</button>
+                </h2>
+                <p>
+                    <span class="editable-text">Our signature 12oz Prime Ribeye, grilled to your preference. This magnificent cut offers succulent juices and rich flavor. Served with creamy garlic mashed potatoes and fresh, seasonal vegetables sourced from local California farms.</span>
+                    <button class="control-buttons edit-button">✏️</button>
+                    <button class="control-buttons speak-button">🔊</button>
+                </p>
+                <div class="price">
+                    <span class="editable-text">$42.00</span>
+                    <button class="control-buttons edit-button">✏️</button>
+                    <button class="control-buttons speak-button">🔊</button>
+                </div>
+                <div class="star-rating">
+                    <input type="radio" id="star5-ribeye" name="rating-ribeye" value="5" /><label for="star5-ribeye" title="5 stars">&#9733;</label>
+                    <input type="radio" id="star4-ribeye" name="rating-ribeye" value="4" /><label for="star4-ribeye" title="4 stars">&#9733;</label>
+                    <input type="radio" id="star3-ribeye" name="rating-ribeye" value="3" /><label for="star3-ribeye" title="3 stars">&#9733;</label>
+                    <input type="radio" id="star2-ribeye" name="rating-ribeye" value="2" /><label for="star2-ribeye" title="2 stars">&#9733;</label>
+                    <input type="radio" id="star1-ribeye" name="rating-ribeye" value="1" /><label for="star1-ribeye" title="1 star">&#9733;</label>
+                    <button class="submit-rating control-buttons">Submit Rating</button>
+                    <div class="rating-message">Thank you for your rating!</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-card">
+            <img src="images/whole_cooked_crab.png" alt="Fisherman's Catch (Dungeness Crab)">
+            <div class="card-content">
+                <h2>
+                    <span class="editable-text">Fisherman's Catch (Dungeness Crab)</span>
+                    <button class="control-buttons edit-button">✏️</button>
+                    <button class="control-buttons speak-button">🔊</button>
+                </h2>
+                <p>
+                    <span class="editable-text">A whole steamed Dungeness crab, caught locally and served with drawn butter, lemon, and a side of garlic bread. This dish offers an authentic taste of Fisherman's Wharf and is perfect for sharing.</span>
+                    <button class="control-buttons edit-button">✏️</button>
+                    <button class="control-buttons speak-button">🔊</button>
+                </p>
+                <div class="price">
+                    <span class="editable-text">$55.00</span>
+                    <button class="control-buttons edit-button">✏️</button>
+                    <button class="control-buttons speak-button">🔊</button>
+                </div>
+                <div class="star-rating">
+                    <input type="radio" id="star5-crab" name="rating-crab" value="5" /><label for="star5-crab" title="5 stars">&#9733;</label>
+                    <input type="radio" id="star4-crab" name="rating-crab" value="4" /><label for="star4-crab" title="4 stars">&#9733;</label>
+                    <input type="radio" id="star3-crab" name="rating-crab" value="3" /><label for="star3-crab" title="3 stars">&#9733;</label>
+                    <input type="radio" id="star2-crab" name="rating-crab" value="2" /><label for="star2-crab" title="2 stars">&#9733;</label>
+                    <input type="radio" id="star1-crab" name="rating-crab" value="1" /><label for="star1-crab" title="1 star">&#9733;</label>
+                    <button class="submit-rating control-buttons">Submit Rating</button>
+                    <div class="rating-message">Thank you for your rating!</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="feedback-section">
+        <h2>General Feedback</h2>
+        <textarea id="generalFeedback" placeholder="Share your thoughts about our menu or experience..."></textarea>
+        <button id="submitFeedback">Submit Feedback</button>
+        <div class="feedback-message">Thank you for your feedback!</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const speakButtons = document.querySelectorAll('.speak-button');
+            const editButtons = document.querySelectorAll('.edit-button');
+            const saveChangesBtn = document.getElementById('saveChangesBtn');
+            const exportFinalBtn = document.getElementById('exportFinalBtn');
+            const submitFeedbackBtn = document.getElementById('submitFeedback');
+            const feedbackMessage = document.querySelector('.feedback-message');
+            const submitRatingButtons = document.querySelectorAll('.submit-rating');
+
+            // Text-to-Speech functionality
+            speakButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const textToSpeak = event.target.previousElementSibling.textContent;
+                    if ('speechSynthesis' in window) {
+                        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                        utterance.lang = 'en-US';
+                        window.speechSynthesis.speak(utterance);
+                    } else {
+                        alert('Sorry, your browser does not support text-to-speech.');
+                    }
+                });
+            });
+
+            // Editable Text functionality
+            editButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const editableSpan = event.target.previousElementSibling;
+                    if (editableSpan && editableSpan.classList.contains('editable-text')) {
+                        editableSpan.contentEditable = editableSpan.contentEditable === 'true' ? 'false' : 'true';
+                        editableSpan.focus();
+                        // Optional: change button text/icon to indicate editing mode
+                        event.target.textContent = editableSpan.contentEditable === 'true' ? '✅' : '✏️';
+                    }
+                });
+            });
+
+            // Save Changes Button
+            saveChangesBtn.addEventListener('click', () => {
+                const htmlContent = document.documentElement.outerHTML;
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'menu_live_edit.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(a.href);
+            });
+
+            // Export Final Button
+            exportFinalBtn.addEventListener('click', () => {
+                const clonedDoc = document.documentElement.cloneNode(true);
+
+                // Function to remove elements with specific class from cloned document
+                const removeElements = (doc, selector) => {
+                    doc.querySelectorAll(selector).forEach(el => el.remove());
+                };
+
+                // Remove edit buttons and save/export buttons from the clone
+                removeElements(clonedDoc, '.edit-button');
+                removeElements(clonedDoc, '#saveChangesBtn');
+                removeElements(clonedDoc, '#exportFinalBtn');
+                removeElements(clonedDoc, '.submit-rating'); // Remove submit rating button
+                removeElements(clonedDoc, '.feedback-message'); // Remove feedback message
+                removeElements(clonedDoc, '.rating-message'); // Remove rating message
+
+                // For star ratings, hide radio inputs and labels that are not checked,
+                // and optionally make stars non-interactive.
+                clonedDoc.querySelectorAll('.star-rating').forEach(starRatingDiv => {
+                    starRatingDiv.querySelectorAll('input[type="radio"]').forEach(radio => {
+                        radio.style.display = 'none'; // Hide radio buttons
+                    });
+                    starRatingDiv.querySelectorAll('label').forEach(label => {
+                        label.style.cursor = 'default'; // Make labels non-clickable
+                    });
+                    // If you want to show only the selected stars for a 'final' view,
+                    // you'd need to capture their state before cloning and apply it here.
+                    // For now, they will just show default or whatever CSS applies.
+                });
+
+                // Remove the general feedback section completely or just its controls
+                const generalFeedbackSection = clonedDoc.querySelector('.feedback-section');
+                if (generalFeedbackSection) {
+                    const textarea = generalFeedbackSection.querySelector('textarea');
+                    const submitButton = generalFeedbackSection.querySelector('button');
+                    const feedbackMsg = generalFeedbackSection.querySelector('.feedback-message');
+                    if (textarea) textarea.remove();
+                    if (submitButton) submitButton.remove();
+                    if (feedbackMsg) feedbackMsg.remove();
+                }
+
+
+                const cleanHtmlContent = clonedDoc.outerHTML;
+                const blob = new Blob([cleanHtmlContent], { type: 'text/html' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'menu_final.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(a.href);
+            });
+
+            // Dummy Feedback Submission
+            submitFeedbackBtn.addEventListener('click', () => {
+                feedbackMessage.style.display = 'block';
+                setTimeout(() => {
+                    feedbackMessage.style.display = 'none';
+                }, 3000);
+            });
+
+            // Dummy Star Rating Submission
+            submitRatingButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const ratingMessage = event.target.nextElementSibling; // The div with class rating-message
+                    ratingMessage.style.display = 'block';
+                    setTimeout(() => {
+                        ratingMessage.style.display = 'none';
+                    }, 3000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

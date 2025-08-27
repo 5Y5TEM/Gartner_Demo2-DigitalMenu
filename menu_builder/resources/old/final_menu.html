@@ -1,0 +1,405 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --dark-background: #1a1a1a;
+            --card-background: #2c2c2c;
+            --text-color: #f0f0f0;
+            --accent-color: #e6b31e; /* Gold-like color */
+            --button-bg: #444;
+            --button-hover: #555;
+            --editable-border: #007bff;
+            --border-radius: 8px;
+            --spacing-unit: 16px;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--dark-background);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--card-background);
+            padding: var(--spacing-unit) 5%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            color: var(--accent-color);
+            margin: 0;
+            font-weight: 700;
+            font-size: 2.2em;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 5px; /* Adjust if needed for small screens */
+        }
+
+        .header-buttons button {
+            background-color: var(--accent-color);
+            color: var(--dark-background);
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 700;
+            transition: background-color 0.3s ease;
+        }
+
+        .header-buttons button:hover {
+            background-color: #d4a71b; /* Slightly darker accent */
+        }
+
+        main {
+            flex-grow: 1;
+            padding: var(--spacing-unit) 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2 * var(--spacing-unit);
+            max-width: 1200px;
+            margin: 2 * var(--spacing-unit) auto;
+        }
+
+        .menu-item-card {
+            background-color: var(--card-background);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu-item-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .menu-item-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .item-details {
+            padding: var(--spacing-unit);
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 10px;
+        }
+
+        .item-name {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin: 0;
+        }
+
+        .item-price {
+            font-size: 1.5em;
+            font-weight: 400;
+            color: var(--text-color);
+            margin: 0;
+            white-space: nowrap; /* Prevents price from wrapping */
+        }
+
+        .item-description {
+            font-size: 0.95em;
+            color: #ccc;
+            flex-grow: 1;
+        }
+
+        .editable-controls {
+            display: inline-flex;
+            gap: 5px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .editable-controls button {
+            background: var(--button-bg);
+            color: var(--text-color);
+            border: none;
+            border-radius: 4px;
+            padding: 5px 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            line-height: 1;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .editable-controls button:hover {
+            background: var(--button-hover);
+        }
+
+        [contenteditable="true"] {
+            outline: none;
+            border-bottom: 1px dashed var(--editable-border);
+            padding-bottom: 2px;
+            transition: border-bottom 0.2s ease;
+        }
+
+        [contenteditable="true"]:focus {
+            border-bottom: 1px solid var(--editable-border);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-buttons {
+                margin-top: var(--spacing-unit);
+                width: 100%;
+                justify-content: center;
+            }
+
+            .header-buttons button {
+                width: calc(50% - 5px); /* Two buttons per row */
+            }
+
+            main {
+                grid-template-columns: 1fr;
+                padding: var(--spacing-unit);
+            }
+
+            .item-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .item-name {
+                font-size: 1.6em;
+            }
+
+            .item-price {
+                font-size: 1.3em;
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Our Menu</h1>
+        <div class="header-buttons">
+            
+            
+        </div>
+    </header>
+
+    <main id="menuContainer">
+        <!-- Menu items will be injected here by JavaScript -->
+    <div class="menu-item-card">
+                <img src="images/steaming_clam_chowder_bread_bowl.png" alt="Sourdough Bowl with Clam Chowder">
+                <div class="item-details">
+                    <div class="item-header">
+                        <h2 class="item-name" id="name-Sourdough-Bowl-with-Clam-Chowder">Sourdough Bowl with Clam Chowder</h2>
+                        <p class="item-price" id="price-Sourdough-Bowl-with-Clam-Chowder" style="">$12.00</p>
+                    </div>
+                    <p class="item-description" id="desc-Sourdough-Bowl-with-Clam-Chowder">A San Francisco classic. Our creamy New England-style clam chowder is served in a freshly baked, crusty sourdough bread bowl from a local bakery.</p>
+                </div>
+            </div><div class="menu-item-card">
+                <img src="images/grilled_steak_dinner.png" alt="Pier 39 Ribeye">
+                <div class="item-details">
+                    <div class="item-header">
+                        <h2 class="item-name" id="name-Pier-39-Ribeye">Pier 39 Ribeye</h2>
+                        <p class="item-price" id="price-Pier-39-Ribeye">$42.00</p>
+                    </div>
+                    <p class="item-description" id="desc-Pier-39-Ribeye">This is our signature steak dish, a perfectly marbled 12oz Prime Ribeye. We grill this magnificent cut to your exact preference, sealing in the succulent juices and rich flavor that make it a true classic. The steak is served alongside our creamy garlic mashed potatoes and fresh, seasonal vegetables sourced from local California farms.</p>
+                </div>
+            </div><div class="menu-item-card">
+                <img src="images/whole_cooked_crab.png" alt="Fisherman's Catch (Dungeness Crab)">
+                <div class="item-details">
+                    <div class="item-header">
+                        <h2 class="item-name" id="name-Fisherman's-Catch-(Dungeness-Crab)">Fisherman's Catch (Dungeness Crab)</h2>
+                        <p class="item-price" id="price-Fisherman's-Catch-(Dungeness-Crab)">$55.00</p>
+                    </div>
+                    <p class="item-description" id="desc-Fisherman's-Catch-(Dungeness-Crab)">A whole steamed Dungeness crab, caught locally and served with drawn butter, lemon, and a side of garlic bread. This dish offers an authentic taste of Fisherman's Wharf and is perfect for sharing.</p>
+                </div>
+            </div></main>
+
+    <script>
+        const menuItems = [
+            {
+                "name": "Sourdough Bowl with Clam Chowder",
+                "price": "12 dollars",
+                "description": "A San Francisco classic. Our creamy New England-style clam chowder is served in a freshly baked, crusty sourdough bread bowl from a local bakery.",
+                "image": "steaming_clam_chowder_bread_bowl.png"
+            },
+            {
+                "name": "Pier 39 Ribeye",
+                "price": "$42.00",
+                "description": "This is our signature steak dish, a perfectly marbled 12oz Prime Ribeye. We grill this magnificent cut to your exact preference, sealing in the succulent juices and rich flavor that make it a true classic. The steak is served alongside our creamy garlic mashed potatoes and fresh, seasonal vegetables sourced from local California farms.",
+                "image": "grilled_steak_dinner.png"
+            },
+            {
+                "name": "Fisherman's Catch (Dungeness Crab)",
+                "price": "$55.00",
+                "description": "A whole steamed Dungeness crab, caught locally and served with drawn butter, lemon, and a side of garlic bread. This dish offers an authentic taste of Fisherman\'s Wharf and is perfect for sharing.",
+                "image": "whole_cooked_crab.png"
+            }
+        ];
+
+        function createMenuItemCard(item) {
+            const card = document.createElement('div');
+            card.className = 'menu-item-card';
+
+            const imgSrc = `images/${item.image}`;
+            card.innerHTML = `
+                <img src="${imgSrc}" alt="${item.name}">
+                <div class="item-details">
+                    <div class="item-header">
+                        <h2 class="item-name" id="name-${item.name.replace(/\s+/g, '-')}" contenteditable="false">${item.name}</h2>
+                        <p class="item-price" id="price-${item.name.replace(/\s+/g, '-')}" contenteditable="false">${item.price}</p>
+                    </div>
+                    <p class="item-description" id="desc-${item.name.replace(/\s+/g, '-')}" contenteditable="false">${item.description}</p>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function addControlsToElement(element, type = 'text') {
+            const controlsDiv = document.createElement('span');
+            controlsDiv.className = 'editable-controls';
+
+            const editButton = document.createElement('button');
+            editButton.className = 'edit-button control-button';
+            editButton.innerHTML = '✏️';
+            editButton.title = 'Toggle Edit Mode';
+            editButton.onclick = (e) => {
+                e.stopPropagation();
+                const isEditable = element.contentEditable === 'true';
+                element.contentEditable = isEditable ? 'false' : 'true';
+                element.focus();
+                // Optional: visual feedback like a border
+                element.style.borderBottom = isEditable ? '' : '1px dashed var(--editable-border)';
+            };
+
+            const soundButton = document.createElement('button');
+            soundButton.className = 'sound-button';
+            soundButton.innerHTML = '🔊';
+            soundButton.title = 'Listen to Text';
+            soundButton.onclick = (e) => {
+                e.stopPropagation();
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(element.innerText);
+                    utterance.lang = 'en-US';
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    alert('Text-to-speech not supported in this browser.');
+                }
+            };
+
+            controlsDiv.appendChild(editButton);
+            controlsDiv.appendChild(soundButton);
+
+            element.parentNode.insertBefore(controlsDiv, element.nextSibling);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuContainer = document.getElementById('menuContainer');
+            menuItems.forEach(item => {
+                const card = createMenuItemCard(item);
+                menuContainer.appendChild(card);
+            });
+
+            // Add controls to each editable text element
+            document.querySelectorAll('.item-name, .item-price, .item-description').forEach(element => {
+                addControlsToElement(element);
+            });
+
+            // Save Changes button
+            document.getElementById('saveChangesBtn').addEventListener('click', () => {
+                const htmlContent = document.documentElement.outerHTML;
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'menu_with_controls.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+
+            // Export Final button
+            document.getElementById('exportFinalBtn').addEventListener('click', () => {
+                const clonedDoc = document.documentElement.cloneNode(true);
+
+                // Remove all control buttons except sound buttons
+                clonedDoc.querySelectorAll('.control-button').forEach(button => {
+                    // Keep sound buttons, remove others
+                    if (!button.classList.contains('sound-button')) {
+                        button.remove();
+                    }
+                });
+
+                // Remove the editable controls container itself if it's empty or only contains sound buttons
+                clonedDoc.querySelectorAll('.editable-controls').forEach(controlsDiv => {
+                    const children = Array.from(controlsDiv.children);
+                    const hasNonSoundButtons = children.some(child => !child.classList.contains('sound-button'));
+                    if (!hasNonSoundButtons) { // If only sound buttons or empty, remove the div
+                        controlsDiv.remove();
+                    }
+                });
+
+                // Remove contenteditable attributes and styling
+                clonedDoc.querySelectorAll('[contenteditable="true"], [contenteditable="false"]').forEach(element => {
+                    element.removeAttribute('contenteditable');
+                    element.style.borderBottom = ''; // Remove any inline border styles
+                });
+
+
+                const htmlContent = clonedDoc.outerHTML;
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'final_menu.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        });
+    </script>
+
+
+</body></html>

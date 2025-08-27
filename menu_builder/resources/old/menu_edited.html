@@ -1,0 +1,284 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wharfside Grill - Menu</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #000;
+            width: 100%;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header img {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            color: #f8f8f8;
+            font-size: 3em;
+            margin: 0;
+            letter-spacing: 2px;
+        }
+
+        .save-button-container {
+            margin-top: 15px;
+        }
+
+        .save-button {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .save-button:hover {
+            background-color: #45a049;
+        }
+
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .menu-item-card {
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .menu-item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+        }
+
+        .menu-item-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #3a3a3a;
+        }
+
+        .item-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .item-name, .item-price, .item-description {
+            position: relative;
+            margin-bottom: 10px;
+            padding: 5px 0; /* Give some padding for editable border */
+        }
+
+        .item-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8em;
+            color: #f0f0f0;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .item-price {
+            font-size: 1.4em;
+            color: #90ee90; /* Light green for price */
+            font-weight: bold;
+            margin-top: auto; /* Push price to bottom */
+        }
+
+        .item-description {
+            font-size: 1em;
+            line-height: 1.6;
+            color: #c0c0c0;
+            flex-grow: 1; /* Allow description to take available space */
+        }
+
+        .editable-text-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Space between text and buttons */
+        }
+
+        [contenteditable="true"] {
+            outline: none;
+            border: 1px solid #7cb9e8; /* Light blue border for edit mode */
+            padding: 4px;
+            border-radius: 3px;
+        }
+
+        .edit-button, .speak-button {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #7cb9e8; /* Light blue */
+            transition: color 0.2s ease;
+            padding: 5px;
+        }
+
+        .edit-button:hover, .speak-button:hover {
+            color: #a0d0f0;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 20px;
+            color: #888;
+            font-size: 0.9em;
+            text-align: center;
+            width: 100%;
+            background-color: #000;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="images/the_wharfside_grill_logo.png" alt="The Wharfside Grill Logo">
+        <h1>The Wharfside Grill</h1>
+        <div class="save-button-container">
+            <button class="save-button" onclick="savePage()">💾 Save Changes</button>
+        </div>
+    </header>
+
+    <div class="menu-container">
+        <div class="menu-item-card">
+            <img src="images/steaming_clam_chowder_bread_bowl.png" alt="Sourdough Bowl with Clam Chowder">
+            <div class="item-content">
+                <div class="editable-text-wrapper">
+                    <h2 class="item-name" id="item-name-1">Sourdough Bowl with Clam Chowder</h2>
+                    <button class="edit-button" onclick="toggleEdit('item-name-1')">✏️</button>
+                    <button class="speak-button" onclick="speakText('item-name-1')">🔊</button>
+                </div>
+                <div class="editable-text-wrapper">
+                    <p class="item-price" id="item-price-1" contenteditable="false">$12.00</p>
+                    <button class="edit-button" onclick="toggleEdit('item-price-1')">✏️</button>
+                    <button class="speak-button" onclick="speakText('item-price-1')">🔊</button>
+                </div>
+                <div class="editable-text-wrapper">
+                    <p class="item-description" id="item-description-1">A San Francisco classic. Our creamy New England-style clam chowder is served in a freshly baked, crusty sourdough bread bowl from a local bakery.</p>
+                    <button class="edit-button" onclick="toggleEdit('item-description-1')">✏️</button>
+                    <button class="speak-button" onclick="speakText('item-description-1')">🔊</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-item-card">
+            <img src="images/grilled_steak_dinner.png" alt="Pier 39 Ribeye">
+            <div class="item-content">
+                <div class="editable-text-wrapper">
+                    <h2 class="item-name" id="item-name-2">Pier 39 Ribeye</h2>
+                    <button class="edit-button" onclick="toggleEdit('item-name-2')">✏️</button>
+                    <button class="speak-button" onclick="speakText('item-name-2')">🔊</button>
+                </div>
+                <div class="editable-text-wrapper">
+                    <p class="item-price" id="item-price-2">$42.00</p>
+                    <button class="edit-button" onclick="toggleEdit('item-price-2')">✏️</button>
+                    <button class="speak-button" onclick="speakText('item-price-2')">🔊</button>
+                </div>
+                <div class="editable-text-wrapper">
+                    <p class="item-description" id="item-description-2">This is our signature steak dish, a perfectly marbled 12oz Prime Ribeye. We grill this magnificent cut to your exact preference, sealing in the succulent juices and rich flavor that make it a true classic. The steak is served alongside our creamy garlic mashed potatoes and fresh, seasonal vegetables sourced from local California farms.</p>
+                    <button class="edit-button" onclick="toggleEdit('item-description-2')">✏️</button>
+                    <button class="speak-button" onclick="speakText('item-description-2')">🔊</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-item-card">
+            <img src="images/whole_cooked_crab.png" alt="Fisherman's Catch (Dungeness Crab)">
+            <div class="item-content">
+                <div class="editable-text-wrapper">
+                    <h2 class="item-name" id="item-name-3">Fisherman's Catch (Dungeness Crab)</h2>
+                    <button class="edit-button" onclick="toggleEdit('item-name-3')">✏️</button>
+                    <button class="speak-button" onclick="speakText('item-name-3')">🔊</button>
+                </div>
+                <div class="editable-text-wrapper">
+                    <p class="item-price" id="item-price-3">$55.00</p>
+                    <button class="edit-button" onclick="toggleEdit('item-price-3')">✏️</button>
+                    <button class="speak-button" onclick="speakText('item-price-3')">🔊</button>
+                </div>
+                <div class="editable-text-wrapper">
+                    <p class="item-description" id="item-description-3">A whole steamed Dungeness crab, caught locally and served with drawn butter, lemon, and a side of garlic bread. This dish offers an authentic taste of Fisherman's Wharf and is perfect for sharing.</p>
+                    <button class="edit-button" onclick="toggleEdit('item-description-3')">✏️</button>
+                    <button class="speak-button" onclick="speakText('item-description-3')">🔊</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2023 The Wharfside Grill. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function toggleEdit(elementId) {
+            const element = document.getElementById(elementId);
+            const isEditable = element.getAttribute('contenteditable') === 'true';
+            element.setAttribute('contenteditable', !isEditable);
+            element.focus();
+        }
+
+        function speakText(elementId) {
+            const element = document.getElementById(elementId);
+            const textToSpeak = element.textContent;
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Text-to-speech is not supported in this browser.');
+            }
+        }
+
+        function savePage() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'menu_edited.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+
+</body></html>

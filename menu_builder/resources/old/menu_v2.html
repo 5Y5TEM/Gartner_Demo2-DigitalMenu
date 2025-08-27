@@ -1,0 +1,413 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wharfside Grill - Menu</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #000;
+            color: #fff;
+            padding: 1rem 2rem;
+            text-align: center;
+            border-bottom: 3px solid #b3884c;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            flex-grow: 1;
+        }
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+        .btn {
+            background-color: #b3884c;
+            color: #1a1a1a;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #a07a42;
+        }
+        main {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            flex-grow: 1;
+        }
+        .menu-item-card {
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        .menu-item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        }
+        .menu-item-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 3px solid #b3884c;
+        }
+        .card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .card-content h2 {
+            font-size: 1.8rem;
+            color: #b3884c;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .card-content p {
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+        .card-content .price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #f0f0f0;
+            margin-top: auto; /* Pushes price to the bottom */
+            margin-bottom: 15px;
+        }
+        .controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+            z-index: 10;
+        }
+        .control-btn {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        .control-btn:hover {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        .stars {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        .star {
+            color: #555;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: color 0.2s ease;
+        }
+        .star.selected, .star:hover ~ .star {
+            color: #b3884c;
+        }
+        .star:hover {
+            color: #b3884c;
+        }
+        .feedback-section {
+            background-color: #2a2a2a;
+            padding: 2rem;
+            margin-top: 2rem;
+            border-top: 3px solid #b3884c;
+            text-align: center;
+        }
+        .feedback-section h2 {
+            color: #b3884c;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .feedback-section textarea {
+            width: 80%;
+            max-width: 600px;
+            height: 100px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #333;
+            color: #f0f0f0;
+            resize: vertical;
+        }
+        .feedback-section .btn {
+            background-color: #b3884c;
+            color: #1a1a1a;
+        }
+        .feedback-message {
+            margin-top: 15px;
+            color: #b3884c;
+            font-weight: bold;
+        }
+
+        /* Utility classes for export function */
+        .no-export {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header-buttons {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+            main {
+                padding: 1rem;
+                gap: 1rem;
+            }
+            .card-content h2 {
+                font-size: 1.5rem;
+            }
+            .card-content .price {
+                font-size: 1.1rem;
+            }
+            .feedback-section textarea {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>The Wharfside Grill - Menu</h1>
+        <div class="header-buttons">
+            <button class="btn export-control" id="saveChangesBtn">💾 Save Changes</button>
+            <button class="btn export-control" id="exportFinalBtn">🚀 Export Final</button>
+        </div>
+    </header>
+
+    <main id="menuContainer">
+        <!-- Menu Items will be dynamically inserted here by JavaScript -->
+    </main>
+
+    <section class="feedback-section">
+        <h2>General Feedback</h2>
+        <textarea id="generalFeedback" placeholder="Share your thoughts about our menu..."></textarea>
+        <button class="btn export-control" id="submitFeedbackBtn">Submit Feedback</button>
+        <div id="feedbackMessage" class="feedback-message"></div>
+    </section>
+
+    <script>
+        const menuItemsData = [
+            {
+                "name": "Sourdough Bowl with Clam Chowder",
+                "price": "$12.00",
+                "description": "A San Francisco classic. Our creamy New England-style clam chowder is served in a freshly baked, crusty sourdough bread bowl from a local bakery.",
+                "image": "steaming_clam_chowder_bread_bowl.png"
+            },
+            {
+                "name": "Pier 39 Ribeye",
+                "price": "$42.00",
+                "description": "This is our signature steak dish, a perfectly marbled 12oz Prime Ribeye. We grill this magnificent cut to your exact preference, sealing in the succulent juices and rich flavor that make it a true classic. The steak is served alongside our creamy garlic mashed potatoes and fresh, seasonal vegetables sourced from local California farms.",
+                "image": "grilled_steak_dinner.png"
+            },
+            {
+                "name": "Fisherman's Catch (Dungeness Crab)",
+                "price": "$55.00",
+                "description": "A whole steamed Dungeness crab, caught locally and served with drawn butter, lemon, and a side of garlic bread. This dish offers an authentic taste of Fisherman's Wharf and is perfect for sharing.",
+                "image": "whole_cooked_crab.png"
+            }
+        ];
+
+        const menuContainer = document.getElementById('menuContainer');
+
+        menuItemsData.forEach(item => {
+            const card = document.createElement('div');
+            card.classList.add('menu-item-card');
+
+            card.innerHTML = `
+                <img src="images/${item.image}" alt="${item.name}">
+                <div class="card-content">
+                    <h2 contenteditable="false">${item.name}</h2>
+                    <p contenteditable="false">${item.description}</p>
+                    <div class="price" contenteditable="false">${item.price}</div>
+                    <div class="stars" data-rating="0">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button class="control-btn edit-btn export-control" data-action="edit">✏️</button>
+                    <button class="control-btn speak-btn" data-action="speak">🔊</button>
+                </div>
+            `;
+            menuContainer.appendChild(card);
+        });
+
+        // Editable Text Functionality
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const parentCard = this.closest('.menu-item-card');
+                const editableElements = parentCard.querySelectorAll('h2, p, .price');
+                editableElements.forEach(el => {
+                    const isEditable = el.contentEditable === 'true';
+                    el.contentEditable = !isEditable;
+                    el.style.outline = isEditable ? 'none' : '1px dashed #b3884c';
+                    el.style.cursor = isEditable ? 'default' : 'text';
+                });
+                this.textContent = this.textContent === '✏️' ? '✅' : '✏️'; // Change button text
+            });
+        });
+
+        // Text-to-Speech Functionality
+        document.querySelectorAll('.speak-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const parentCard = this.closest('.menu-item-card');
+                const textToSpeak = Array.from(parentCard.querySelectorAll('h2, p, .price'))
+                                       .map(el => el.textContent)
+                                       .join('. ');
+                if (textToSpeak && window.speechSynthesis) {
+                    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                    utterance.lang = 'en-US';
+                    window.speechSynthesis.speak(utterance);
+                } else if (!window.speechSynthesis) {
+                    alert("Your browser does not support the Web Speech API.");
+                }
+            });
+        });
+
+        // Star Rating Functionality
+        document.querySelectorAll('.stars').forEach(starsContainer => {
+            starsContainer.addEventListener('click', function(e) {
+                if (e.target.classList.contains('star')) {
+                    const value = parseInt(e.target.dataset.value);
+                    starsContainer.dataset.rating = value;
+                    Array.from(starsContainer.children).forEach(star => {
+                        star.classList.remove('selected');
+                    });
+                    for (let i = 0; i < value; i++) {
+                        starsContainer.children[i].classList.add('selected');
+                    }
+                }
+            });
+            starsContainer.addEventListener('mouseover', function(e) {
+                if (e.target.classList.contains('star')) {
+                    const value = parseInt(e.target.dataset.value);
+                    Array.from(starsContainer.children).forEach(star => {
+                        if (parseInt(star.dataset.value) <= value) {
+                            star.classList.add('hovered');
+                        } else {
+                            star.classList.remove('hovered');
+                        }
+                    });
+                }
+            });
+            starsContainer.addEventListener('mouseout', function() {
+                Array.from(starsContainer.children).forEach(star => {
+                    star.classList.remove('hovered');
+                });
+            });
+        });
+
+        // General Feedback Submission
+        document.getElementById('submitFeedbackBtn').addEventListener('click', function() {
+            const feedbackText = document.getElementById('generalFeedback').value;
+            const feedbackMessageDiv = document.getElementById('feedbackMessage');
+            if (feedbackText.trim() !== '') {
+                feedbackMessageDiv.textContent = "Thank you for your feedback!";
+                document.getElementById('generalFeedback').value = ''; // Clear textarea
+                setTimeout(() => {
+                    feedbackMessageDiv.textContent = '';
+                }, 3000); // Clear message after 3 seconds
+            } else {
+                feedbackMessageDiv.textContent = "Please enter some feedback.";
+                feedbackMessageDiv.style.color = "red";
+                setTimeout(() => {
+                    feedbackMessageDiv.textContent = '';
+                    feedbackMessageDiv.style.color = "#b3884c";
+                }, 3000);
+            }
+        });
+
+        // Save Changes Button
+        document.getElementById('saveChangesBtn').addEventListener('click', function() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'menu_editable.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+        });
+
+        // Export Final Button
+        document.getElementById('exportFinalBtn').addEventListener('click', function() {
+            const clone = document.documentElement.cloneNode(true);
+
+            // Remove all elements with 'export-control' class from the clone
+            clone.querySelectorAll('.export-control').forEach(el => el.remove());
+
+            // Remove contenteditable attributes and outline styles from the clone
+            clone.querySelectorAll('[contenteditable="true"]').forEach(el => {
+                el.removeAttribute('contenteditable');
+                el.style.outline = 'none';
+                el.style.cursor = 'default';
+            });
+            
+            // Revert '✅' back to '✏️' if any
+            clone.querySelectorAll('.edit-btn').forEach(btn => {
+                if (btn.textContent === '✅') {
+                    btn.textContent = '✏️';
+                }
+            });
+
+
+            const htmlContent = clone.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'menu_final.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+        });
+    </script>
+</body>
+</html>

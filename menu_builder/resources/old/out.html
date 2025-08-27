@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Golden Gate Bistro - Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #A0522D; /* Sienna - Warm brown */
+            --secondary-color: #8B4513; /* SaddleBrown - Darker brown */
+            --accent-color: #FFD700; /* Gold */
+            --text-dark: #36454F; /* Charcoal */
+            --text-light: #F5F5DC; /* Beige */
+            --background-light: #FDF5E6; /* Old Lace */
+            --background-dark: #2F4F4F; /* DarkSlateGray */
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 2.5rem 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .menu-item-card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            border: 1px solid #ddd;
+        }
+
+        .menu-item-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-item-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .menu-item-card:hover img {
+            transform: scale(1.03);
+        }
+
+        .item-details {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .item-details h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            position: relative;
+            padding-right: 60px; /* Space for buttons */
+        }
+
+        .item-details .price {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            position: relative;
+            padding-right: 60px; /* Space for buttons */
+        }
+
+        .item-details p {
+            font-size: 1rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+            position: relative;
+            padding-right: 60px; /* Space for buttons */
+        }
+
+        .edit-controls {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 5px;
+        }
+
+        .edit-btn, .speak-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.3rem;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+            color: var(--primary-color);
+        }
+
+        .edit-btn:hover, .speak-btn:hover {
+            background-color: var(--background-light);
+        }
+
+        [contenteditable="true"] {
+            outline: none;
+            border: 1px dashed var(--accent-color);
+            padding: 2px 5px;
+            border-radius: 4px;
+            background-color: #FFFACD; /* Lemon Chiffon */
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5rem;
+            }
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .item-details h2, .item-details .price, .item-details p {
+                padding-right: 0; /* No space needed on smaller screens */
+            }
+            .edit-controls {
+                position: static; /* Stack controls on smaller screens */
+                margin-top: 0.5rem;
+                transform: none;
+                justify-content: flex-end;
+            }
+            .menu-item-card {
+                margin: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>The Golden Gate Bistro</h1>
+        <p>Experience the finest coastal Californian cuisine, crafted with fresh, local ingredients and inspired by the vibrant flavors of the Pacific.</p>
+    </header>
+
+    <main class="container">
+"""
+
+for item in menu_with_images:
+    html_content += f"""
+        <div class="menu-item-card">
+            <img src="images/{item['image']}" alt="{item['name']}">
+            <div class="item-details">
+                <h2>
+                    <span class="editable" data-field="name">{item['name']}</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'name')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'name')">🔊</button>
+                    </span>
+                </h2>
+                <div class="price">
+                    <span class="editable" data-field="price">{item['price']}</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'price')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'price')">🔊</button>
+                    </span>
+                </div>
+                <p>
+                    <span class="editable" data-field="description">{item['description']}</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'description')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'description')">🔊</button>
+                    </span>
+                </p>
+            </div>
+        </div>
+"""
+
+html_content += """
+    </main>
+
+    <footer>
+        <p>&copy; 2025 The Golden Gate Bistro. All rights reserved.</p>
+        <p>123 Pier Ave, San Francisco, CA 94133 | (555) 123-4567</p>
+    </footer>
+
+    <script>
+        function toggleEdit(button, field) {
+            const parentElement = button.closest('h2') || button.closest('.price') || button.closest('p');
+            const editableSpan = parentElement.querySelector(`.editable[data-field="${field}"]`);
+
+            if (editableSpan) {
+                const isEditable = editableSpan.getAttribute('contenteditable') === 'true';
+                editableSpan.setAttribute('contenteditable', !isEditable);
+                editableSpan.focus();
+                
+                // Toggle visual indicator
+                if (!isEditable) {
+                    editableSpan.style.border = '1px dashed var(--accent-color)';
+                    editableSpan.style.backgroundColor = '#FFFACD';
+                    button.textContent = '✅'; // Change button to indicate save/done
+                } else {
+                    editableSpan.style.border = 'none';
+                    editableSpan.style.backgroundColor = 'transparent';
+                    button.textContent = '✏️'; // Change button back to edit
+                }
+            }
+        }
+
+        function speakText(button, field) {
+            const parentElement = button.closest('h2') || button.closest('.price') || button.closest('p');
+            const textToSpeak = parentElement.querySelector(`.editable[data-field="${field}"]`).textContent;
+
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                utterance.lang = 'en-US'; // Set language if needed
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Text-to-speech not supported in your browser.");
+            }
+        }
+    </script>
+</body>
+</html>
+"""
+
+print(html_content)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Golden Gate Bistro - Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #A0522D; /* Sienna - Warm brown */
+            --secondary-color: #8B4513; /* SaddleBrown - Darker brown */
+            --accent-color: #FFD700; /* Gold */
+            --text-dark: #36454F; /* Charcoal */
+            --text-light: #F5F5DC; /* Beige */
+            --background-light: #FDF5E6; /* Old Lace */
+            --background-dark: #2F4F4F; /* DarkSlateGray */
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 2.5rem 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .menu-item-card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            border: 1px solid #ddd;
+        }
+
+        .menu-item-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-item-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .menu-item-card:hover img {
+            transform: scale(1.03);
+        }
+
+        .item-details {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .item-details h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            position: relative;
+            padding-right: 60px; /* Space for buttons */
+        }
+
+        .item-details .price {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            position: relative;
+            padding-right: 60px; /* Space for buttons */
+        }
+
+        .item-details p {
+            font-size: 1rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+            position: relative;
+            padding-right: 60px; /* Space for buttons */
+        }
+
+        .edit-controls {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 5px;
+        }
+
+        .edit-btn, .speak-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.3rem;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+            color: var(--primary-color);
+        }
+
+        .edit-btn:hover, .speak-btn:hover {
+            background-color: var(--background-light);
+        }
+
+        [contenteditable="true"] {
+            outline: none;
+            border: 1px dashed var(--accent-color);
+            padding: 2px 5px;
+            border-radius: 4px;
+            background-color: #FFFACD; /* Lemon Chiffon */
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5rem;
+            }
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .item-details h2, .item-details .price, .item-details p {
+                padding-right: 0; /* No space needed on smaller screens */
+            }
+            .edit-controls {
+                position: static; /* Stack controls on smaller screens */
+                margin-top: 0.5rem;
+                transform: none;
+                justify-content: flex-end;
+            }
+            .menu-item-card {
+                margin: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>The Golden Gate Bistro</h1>
+        <p>Experience the finest coastal Californian cuisine, crafted with fresh, local ingredients and inspired by the vibrant flavors of the Pacific.</p>
+    </header>
+
+    <main class="container">
+        <div class="menu-item-card">
+            <img src="images/dungeness_crab_cakes_with_aioli.png" alt="Dungeness Crab Cakes">
+            <div class="item-details">
+                <h2>
+                    <span class="editable" data-field="name">Dungeness Crab Cakes</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'name')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'name')">🔊</button>
+                    </span>
+                </h2>
+                <div class="price">
+                    <span class="editable" data-field="price">$22.00</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'price')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'price')">🔊</button>
+                    </span>
+                </div>
+                <p>
+                    <span class="editable" data-field="description">Pan-seared Dungeness crab cakes, served with a zesty lemon-dill aioli and crisp arugula. A true taste of the Pacific coast.</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'description')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'description')">🔊</button>
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="menu-item-card">
+            <img src="images/classic_caesar_salad_with_croutons.png" alt="Classic Caesar Salad">
+            <div class="item-details">
+                <h2>
+                    <span class="editable" data-field="name">Classic Caesar Salad</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'name')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'name')">🔊</button>
+                    </span>
+                </h2>
+                <div class="price">
+                    <span class="editable" data-field="price">$14.00</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'price')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'price')">🔊</button>
+                    </span>
+                </div>
+                <p>
+                    <span class="editable" data-field="description">Crisp romaine lettuce, house-made croutons, shaved Parmesan, and our signature Caesar dressing. Add grilled chicken or shrimp for an additional charge.</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'description')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'description')">🔊</button>
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="menu-item-card">
+            <img src="images/clam_chowder_sourdough_bowl.png" alt="San Francisco Clam Chowder">
+            <div class="item-details">
+                <h2>
+                    <span class="editable" data-field="name">San Francisco Clam Chowder</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'name')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'name')">🔊</button>
+                    </span>
+                </h2>
+                <div class="price">
+                    <span class="editable" data-field="price">$16.00</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'price')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'price')">🔊</button>
+                    </span>
+                </div>
+                <p>
+                    <span class="editable" data-field="description">A creamy, rich clam chowder, brimming with fresh clams and potatoes, served in a freshly baked sourdough bread bowl. A Wharf classic.</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'description')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'description')">🔊</button>
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="menu-item-card">
+            <img src="images/fish_and_chips_with_tartar_sauce.png" alt="Fisherman's Wharf Fish & Chips">
+            <div class="item-details">
+                <h2>
+                    <span class="editable" data-field="name">Fisherman's Wharf Fish & Chips</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'name')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'name')">🔊</button>
+                    </span>
+                </h2>
+                <div class="price">
+                    <span class="editable" data-field="price">$24.00</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'price')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'price')">🔊</button>
+                    </span>
+                </div>
+                <p>
+                    <span class="editable" data-field="description">Crispy, golden-fried cod fillets served with a generous portion of seasoned fries, homemade tartar sauce, and a lemon wedge.</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'description')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'description')">🔊</button>
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="menu-item-card">
+            <img src="images/pier_39_prime_ribeye_steak.png" alt="Pier 39 Ribeye">
+            <div class="item-details">
+                <h2>
+                    <span class="editable" data-field="name">Pier 39 Ribeye</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'name')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'name')">🔊</button>
+                    </span>
+                </h2>
+                <div class="price">
+                    <span class="editable" data-field="price">$42.00</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'price')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'price')">🔊</button>
+                    </span>
+                </div>
+                <p>
+                    <span class="editable" data-field="description">A perfectly grilled 14oz USDA Prime Ribeye, seasoned and cooked to your preference. Served with garlic mashed potatoes and seasonal vegetables.</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'description')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'description')">🔊</button>
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="menu-item-card">
+            <img src="images/crab_cioppino_seafood_stew.png" alt="Crab Cioppino">
+            <div class="item-details">
+                <h2>
+                    <span class="editable" data-field="name">Crab Cioppino</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'name')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'name')">🔊</button>
+                    </span>
+                </h2>
+                <div class="price">
+                    <span class="editable" data-field="price">$38.00</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'price')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'price')">🔊</button>
+                    </span>
+                </div>
+                <p>
+                    <span class="editable" data-field="description">A hearty San Francisco-style seafood stew with fresh Dungeness crab, mussels, clams, shrimp, and white fish in a rich tomato-based broth. Served with crusty sourdough bread.</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'description')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'description')">🔊</button>
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="menu-item-card">
+            <img src="images/california_chicken_sandwich.png" alt="California Chicken Sandwich">
+            <div class="item-details">
+                <h2>
+                    <span class="editable" data-field="name">California Chicken Sandwich</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'name')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'name')">🔊</button>
+                    </span>
+                </h2>
+                <div class="price">
+                    <span class="editable" data-field="price">$20.00</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'price')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'price')">🔊</button>
+                    </span>
+                </div>
+                <p>
+                    <span class="editable" data-field="description">Grilled chicken breast, avocado, Swiss cheese, lettuce, tomato, and a honey-mustard aioli on toasted sourdough. Served with a side of fries or salad.</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'description')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'description')">🔊</button>
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="menu-item-card">
+            <img src="images/chocolate_lava_cake_with_berries.png" alt="Warm Chocolate Lava Cake">
+            <div class="item-details">
+                <h2>
+                    <span class="editable" data-field="name">Warm Chocolate Lava Cake</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'name')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'name')">🔊</button>
+                    </span>
+                </h2>
+                <div class="price">
+                    <span class="editable" data-field="price">$12.00</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'price')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'price')">🔊</button>
+                    </span>
+                </div>
+                <p>
+                    <span class="editable" data-field="description">A rich, decadent chocolate cake with a molten center, served with a scoop of vanilla bean ice cream and fresh berries.</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'description')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'description')">🔊</button>
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="menu-item-card">
+            <img src="images/seasonal_berry_cheesecake_dessert.png" alt="Seasonal Berry Cheesecake">
+            <div class="item-details">
+                <h2>
+                    <span class="editable" data-field="name">Seasonal Berry Cheesecake</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'name')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'name')">🔊</button>
+                    </span>
+                </h2>
+                <div class="price">
+                    <span class="editable" data-field="price">$11.00</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'price')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'price')">🔊</button>
+                    </span>
+                </div>
+                <p>
+                    <span class="editable" data-field="description">Creamy New York-style cheesecake topped with a medley of fresh seasonal berries and a delicate berry coulis.</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'description')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'description')">🔊</button>
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="menu-item-card">
+            <img src="images/childrens_mini_cheeseburger_fries.png" alt="Kid's Mini Cheeseburgers">
+            <div class="item-details">
+                <h2>
+                    <span class="editable" data-field="name">Kid's Mini Cheeseburgers</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'name')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'name')">🔊</button>
+                    </span>
+                </h2>
+                <div class="price">
+                    <span class="editable" data-field="price">$10.00</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'price')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'price')">🔊</button>
+                    </span>
+                </div>
+                <p>
+                    <span class="editable" data-field="description">Two juicy mini cheeseburger sliders served with a side of crispy fries. Perfect for our younger guests.</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'description')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'description')">🔊</button>
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="menu-item-card">
+            <img src="images/childrens_crispy_chicken_tenders.png" alt="Kid's Crispy Chicken Tenders">
+            <div class="item-details">
+                <h2>
+                    <span class="editable" data-field="name">Kid's Crispy Chicken Tenders</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'name')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'name')">🔊</button>
+                    </span>
+                </h2>
+                <div class="price">
+                    <span class="editable" data-field="price">$9.00</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'price')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'price')">🔊</button>
+                    </span>
+                </div>
+                <p>
+                    <span class="editable" data-field="description">Golden-fried chicken tenders served with a side of fries and your choice of dipping sauce.</span>
+                    <span class="edit-controls">
+                        <button class="edit-btn" onclick="toggleEdit(this, 'description')">✏️</button>
+                        <button class="speak-btn" onclick="speakText(this, 'description')">🔊</button>
+                    </span>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 The Golden Gate Bistro. All rights reserved.</p>
+        <p>123 Pier Ave, San Francisco, CA 94133 | (555) 123-4567</p>
+    </footer>
+
+    <script>
+        function toggleEdit(button, field) {
+            const parentElement = button.closest('h2') || button.closest('.price') || button.closest('p');
+            const editableSpan = parentElement.querySelector(`.editable[data-field="${field}"]`);
+
+            if (editableSpan) {
+                const isEditable = editableSpan.getAttribute('contenteditable') === 'true';
+                editableSpan.setAttribute('contenteditable', !isEditable);
+                editableSpan.focus();
+                
+                // Toggle visual indicator
+                if (!isEditable) {
+                    editableSpan.style.border = '1px dashed var(--accent-color)';
+                    editableSpan.style.backgroundColor = '#FFFACD';
+                    button.textContent = '✅'; // Change button to indicate save/done
+                } else {
+                    editableSpan.style.border = 'none';
+                    editableSpan.style.backgroundColor = 'transparent';
+                    button.textContent = '✏️'; // Change button back to edit
+                }
+            }
+        }
+
+        function speakText(button, field) {
+            const parentElement = button.closest('h2') || button.closest('.price') || button.closest('p');
+            const textToSpeak = parentElement.querySelector(`.editable[data-field="${field}"]`).textContent;
+
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                utterance.lang = 'en-US'; // Set language if needed
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Text-to-speech not supported in your browser.");
+            }
+        }
+    </script>
+</body>
+</html>
